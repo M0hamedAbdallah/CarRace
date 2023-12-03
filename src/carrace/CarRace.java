@@ -17,14 +17,17 @@ import javax.media.opengl.glu.GLU;
 /**
  *
  * @author Mohamed
+ * @author yahia
+ * @author Islam
+ * @author Nabil
+ * @author Timo
  */
 public class CarRace extends AnimListener implements GLEventListener, MouseListener {
 
     String name;
-    int x,y;
+    int x, y;
     int mx;
     int my;
-
 
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
@@ -34,17 +37,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
 
-    
-
     private int rand(int i) {
         Random rand = new Random();
         return rand.nextInt(i + 1);
     }
 
-    
-
-    public CarRace(String name , int width , int hight) {
-        this.name = name;
+    public CarRace(String name, int width, int hight) {
+        name = this.name;
         x = width;
         y = hight;
     }
@@ -76,8 +75,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glDisable(GL.GL_BLEND);
     }
 
-    
-
     @Override
     public void init(GLAutoDrawable gld) {
         GL gl = gld.getGL();
@@ -94,7 +91,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 //            System.err.println(ex.getMessage());
 //        }
 //        AudioPlayer.player.start(audios);
-
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -129,7 +125,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
             handleKeyPress();
             squreOfHome(gl, 0);
-            
+
         } catch (Exception ex) {
 
         }
@@ -166,30 +162,24 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     public boolean isKeyPressed(final int keyCode) {
         return keyBits.get(keyCode);
     }
-    
-    
-    
-    
+
     //will use this to control the menu
     @Override
     public void mouseClicked(MouseEvent e) {
         mx = e.getX();
         my = e.getY();
+        my = y - my;
         System.out.println(mx + " " + my);
-        
+
     }
     /////////////////////////////////////
 
-    
     //will use this to control to cars in maltu and in one player
     public void handleKeyPress() {
 
 //        if (isKeyPressed(KeyEvent.VK_A)) {
 //            
 //        }  
-
-
-
     }
     ////////////////////////////////////////////////////
 
