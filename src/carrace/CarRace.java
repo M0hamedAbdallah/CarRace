@@ -28,11 +28,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int x, y;
     int mx;
     int my;
-
+    boolean home = true;
+    boolean howToPlay = false;
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png"
+        "Window.png","howtoplay.png"
     };
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
@@ -124,11 +125,17 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             GL gl = gld.getGL();
             gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
             handleKeyPress();
+           if(home){
             squreOfHome(gl, 0);
+           }
+           if(howToPlay){
+             squreOfHome(gl, 1);
+            }
 
         } catch (Exception ex) {
 
         }
+
     }
 
     @Override
@@ -171,7 +178,31 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         my = y - my;
         System.out.println(mx + " " + my);
 
-    }
+        
+        
+                if (home) {
+            if ((mx > 195 && mx < 458) && (my > (240) && my < (305))) {
+                System.out.println("exit");
+                System.exit(0);
+            } else if ((mx > 195 && mx < 458) && (my > (340) && my < (405))) {
+                System.out.println("How To Play");
+                home = false;
+                howToPlay = true;
+            }
+//            else {
+//                    musicOn = true;
+////                    AudioPlayer.player.start(audios);
+//                }
+            }
+             if(howToPlay){
+                  if ((mx > 14 && mx < 84) && (my > (634) && my < (686))) {
+                    System.out.println("return");
+                home = true;
+                howToPlay =false;
+                  }
+             }
+        }
+    
     /////////////////////////////////////
 
     //will use this to control to cars in maltu and in one player
