@@ -33,7 +33,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png","howtoplay.png"
+        "Window.png", "howtoplay.png"
     };
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
@@ -125,11 +125,11 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             GL gl = gld.getGL();
             gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
             handleKeyPress();
-           if(home){
-            squreOfHome(gl, 0);
-           }
-           if(howToPlay){
-             squreOfHome(gl, 1);
+            if (home) {
+                squreOfHome(gl, 0);
+            }
+            if (howToPlay) {
+                squreOfHome(gl, 1);
             }
 
         } catch (Exception ex) {
@@ -178,9 +178,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         my = y - my;
         System.out.println(mx + " " + my);
 
-        
-        
-                if (home) {
+        if (home) {
             if ((mx > 195 && mx < 458) && (my > (240) && my < (305))) {
                 System.out.println("exit");
                 System.exit(0);
@@ -193,18 +191,17 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 //                    musicOn = true;
 ////                    AudioPlayer.player.start(audios);
 //                }
-            }
-             if(howToPlay){
-                  if ((mx > 14 && mx < 84) && (my > (634) && my < (686))) {
-                    System.out.println("return");
-                home = true;
-                howToPlay =false;
-                  }
-             }
         }
-    
-    /////////////////////////////////////
+        if (howToPlay) {
+            if ((mx > 14 && mx < 84) && (my > (634) && my < (686))) {
+                System.out.println("return");
+                home = true;
+                howToPlay = false;
+            }
+        }
+    }
 
+    /////////////////////////////////////
     //will use this to control to cars in maltu and in one player
     public void handleKeyPress() {
 
