@@ -40,6 +40,9 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean HIGHSCORE = false;
     boolean MultiPlayer = false;
     String Name;
+    int backgroundY=0;
+    boolean reverseBackground = false;
+
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
@@ -174,7 +177,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 printHighScoreName();
             }
             if (MultiPlayer) {
-                squreINLeft(gl, 3);
+                moveBackground();
+                drawBackground(gl);
+
+
             }
 
         } catch (Exception ex) {
@@ -182,6 +188,48 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         }
 
     }
+    
+    
+    
+    
+    private void moveBackground() {
+    int backgroundSpeed = 5;
+
+    backgroundY += backgroundSpeed;
+    if (backgroundY >= 700) {
+        backgroundY = 0;  
+    }
+}
+
+private void drawBackground(GL gl) {
+    gl.glEnable(GL.GL_BLEND);   
+    gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[3]); 
+
+    gl.glPushMatrix();
+
+    gl.glBegin(GL.GL_QUADS);
+
+    gl.glTexCoord2f(0.0f, backgroundY / 700.0f);
+    gl.glVertex3f(0f, 0f, -1.0f);
+
+    gl.glTexCoord2f(1.0f, backgroundY / 700.0f);
+    gl.glVertex3f(700f, 0f, -1.0f);
+
+    gl.glTexCoord2f(1.0f, (backgroundY + 700f) / 700.0f);
+    gl.glVertex3f(700f, 700f, -1.0f);
+
+    gl.glTexCoord2f(0.0f, (backgroundY + 700f) / 700.0f);
+    gl.glVertex3f(0f, 700f, -1.0f);
+
+    gl.glEnd();
+    gl.glPopMatrix();
+
+    gl.glDisable(GL.GL_BLEND);
+}
+    
+    
+    
+    
 
     public void printHighScoreName() {
         GL gl = glc.getGL();
@@ -267,6 +315,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 x = 1200;
                 y = 1200;
                 frame.setSize(1200, 1200);
+                frame.setLocationRelativeTo(null);
                 centerWindow(frame);
                 glc.repaint();
             }
