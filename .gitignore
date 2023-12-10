@@ -9,3 +9,5 @@ manifest.mf
 CarRace.iml
 build.xml
 nbproject/project.properties
+*.properties
+nbproject/project.properties
