@@ -15,6 +15,10 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import java.awt.Font;
 import com.sun.opengl.util.j2d.TextRenderer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 /**
  *
@@ -33,7 +37,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean home = true;
     boolean howToPlay = false;
     boolean HIGHSCORE = false;
-    String Name;
+     int highScore = 0;
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
@@ -41,6 +45,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     };
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
+     int score;
 
     private int rand(int i) {
         Random rand = new Random();
@@ -52,7 +57,23 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         x = width;
         y = hight;
     }
-
+    public void readHighScore() {
+        try (BufferedReader br = new BufferedReader(new FileReader("highscore.txt"))) {
+            String line = br.readLine();
+            if (line != null) {
+                highScore = Integer.parseInt(line);
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeHighScore() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.txt"))) {
+            bw.write(Integer.toString(highScore));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void squreOfHome(GL gl, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
@@ -138,6 +159,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if (HIGHSCORE) {
                 squreOfHome(gl, 2);
                 printHighScoreName();
+                printHighScoreNumber();
             }
 
         } catch (Exception ex) {
@@ -160,6 +182,25 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         textRenderer.beginRendering(glc.getWidth(), glc.getHeight());
         textRenderer.draw(name, xPos, yPos);
+        textRenderer.endRendering();
+
+        gl.glPopMatrix();
+    }
+    public void printHighScoreNumber() {
+        GL gl = glc.getGL();
+        TextRenderer textRenderer = new TextRenderer(new Font("RACE SPACE STR", Font.PLAIN, 30));
+
+        int xPos = 330 ;
+        int yPos = 190;
+
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        gl.glTranslatef(xPos, yPos, 0);
+
+        textRenderer.beginRendering(glc.getWidth(), glc.getHeight());
+        textRenderer.draw(String.valueOf(highScore), xPos, yPos);
         textRenderer.endRendering();
 
         gl.glPopMatrix();
@@ -222,6 +263,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 home = false;
                 HIGHSCORE = true;
                 System.out.println(name);
+                readHighScore();
+                System.out.println("High Score: " + highScore);
             }
 //            else {
 //                    musicOn = true;
@@ -247,10 +290,15 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     /////////////////////////////////////
     //will use this to control to cars in maltu and in one player
     public void handleKeyPress() {
-
 //        if (isKeyPressed(KeyEvent.VK_A)) {
-//            
-//        }  
+//            if (score > highScore) {
+//                highScore = score;
+//                writeHighScore();
+//                System.out.println("New High Score: " + highScore);
+//            }
+//        }
+
+
     }
     ////////////////////////////////////////////////////
 
