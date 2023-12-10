@@ -15,6 +15,7 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import java.awt.Font;
 import com.sun.opengl.util.j2d.TextRenderer;
+import javax.swing.JFrame;
 
 /**
  *
@@ -27,17 +28,19 @@ import com.sun.opengl.util.j2d.TextRenderer;
 public class CarRace extends AnimListener implements GLEventListener, MouseListener {
 
     String name;
+    JFrame frame;
     int x, y;
     int mx;
     int my;
     boolean home = true;
     boolean howToPlay = false;
     boolean HIGHSCORE = false;
+    boolean MultiPlayer = false;
     String Name;
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png", "howtoplay.png", "HIGH-SCORE.png"
+        "Window.png", "howtoplay.png", "HIGH-SCORE.png" , "Road.jpeg"
     };
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
@@ -47,10 +50,11 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         return rand.nextInt(i + 1);
     }
 
-    public CarRace(String name, int width, int hight) {
+    public CarRace(String name, int width, int hight, JFrame frame) {
         this.name = name;
         x = width;
         y = hight;
+        this.frame = frame;
     }
 
     public void squreOfHome(GL gl, int index) {
@@ -79,7 +83,34 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         gl.glDisable(GL.GL_BLEND);
     }
+    
+    public void squreINLeft(GL gl, int index) {
+        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
 
+        gl.glPushMatrix();
+
+        gl.glBegin(GL.GL_QUADS);
+
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(0f, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(700, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(700f, 700f, -1.0f);
+
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(0f, 700f, -1.0f);
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+    
     @Override
     public void init(GLAutoDrawable gld) {
         GL gl = gld.getGL();
@@ -139,12 +170,16 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 squreOfHome(gl, 2);
                 printHighScoreName();
             }
+            if (MultiPlayer) {
+                squreOfHome(gl, 3);
+            }
 
         } catch (Exception ex) {
 
         }
 
     }
+
     public void printHighScoreName() {
         GL gl = glc.getGL();
         TextRenderer textRenderer = new TextRenderer(new Font("RACE SPACE STR", Font.PLAIN, 30));
@@ -164,6 +199,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         gl.glPopMatrix();
     }
+
     @Override
     public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
 
@@ -191,6 +227,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     public void keyTyped(final KeyEvent event) {
         // don't care 
     }
+
     public String getName() {
         return name;
     }
@@ -215,13 +252,17 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("How To Play");
                 home = false;
                 howToPlay = true;
-            }
-            else if ((mx > 212 && mx < 468) && (my > (97) && my < (154)))
-            {
+            } else if ((mx > 212 && mx < 468) && (my > (97) && my < (154))) {
                 System.out.println("High Score");
                 home = false;
                 HIGHSCORE = true;
                 System.out.println(name);
+            } else if ((mx > 210 && mx < 489) && (my > (425) && my < (494))) {
+                System.out.println("MultiPlayer");
+                home = false;
+                MultiPlayer = true;
+                x = x * 2;
+                frame.setSize(1400, 700);
             }
 //            else {
 //                    musicOn = true;
