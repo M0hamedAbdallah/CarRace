@@ -1,0 +1,10 @@
+# Folders
+.idea/
+build/
+nbproject/
+out/
+
+# Files
+manifest.mf
+CarRace.iml
+build.xml
