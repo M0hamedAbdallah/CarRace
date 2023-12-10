@@ -40,7 +40,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png", "howtoplay.png", "HIGH-SCORE.png" , "Road.jpeg"
+        "Window.png", "howtoplay.png", "HIGH-SCORE.png"
     };
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
