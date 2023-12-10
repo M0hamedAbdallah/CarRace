@@ -24,7 +24,7 @@ import com.sun.opengl.util.j2d.TextRenderer;
  * @author Nabil
  * @author Timo
  */
-public class CarRace extends AnimListener implements GLEventListener, MouseListener {
+public class TwoPlayer extends AnimListener implements GLEventListener, MouseListener {
 
     String name;
     int x, y;
@@ -53,7 +53,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         return rand.nextInt(i + 1);
     }
 
-    public CarRace(String name, int width, int hight) {
+    public TwoPlayer(String name, int width, int hight) {
         this.name = name;
         x = width;
         y = hight;
@@ -159,27 +159,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     @Override
     public void display(GLAutoDrawable gld) {
-        try {
+        
             GL gl = gld.getGL();
             gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
             handleKeyPress();
-            if (home) {
-                squreOfHome(gl, 0);
-            }
-            if (howToPlay) {
-                squreOfHome(gl, 1);
-            }
-            if (HIGHSCORE) {
-                squreOfHome(gl, 2);
-                printHighScoreName();
-            }
-//            if(TwoPlayer){
-//                squreOfHome(gl, 3);
-//            }
+            squreOfHome(gl, 3);
 
-        } catch (Exception ex) {
-            
-        }
 
     }
     public void printHighScoreName() {
@@ -262,11 +247,11 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             }
             else if ((mx > 195 && mx < 458) && (my > (430) && my < (485))) {
                 System.out.println("Two Player");
-                home = true;
+                home = false;
                 TwoPlayer = true;
-                STart.blbl=1;
-                System.exit(0);
-                new STart(this, name);
+//                STart.set=1200;
+//                y=1200;
+//                new STart(this, name);
             }
         
 //            else {
