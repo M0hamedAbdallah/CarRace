@@ -68,7 +68,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int backgroundY = 0;
 
     ///multi position
-    int x_Car_multi_one = 200, y_Car_multi_one = 20;
+    int x_Car_multi_one = 370, y_Car_multi_one = -50, x_Car_multi_two = 370*2, y_Car_multi_two = -50;
     boolean puase = false;
 
     //Assets/thephoto.png
@@ -353,6 +353,9 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             }
             if (MultiPlayer) {
                 if (!puase) {
+                    if(y_Car_multi_one < 20){
+                        y_Car_multi_one += 5;
+                    }
                     moveBackground();
                     drawBackground(gl);
                     gl.glPushMatrix();
@@ -405,8 +408,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 // Draw the purple car
                 drawCar(gl, 5, randomX2, purpleCarY, 70, 110);
 
-//                drawCar(gl, 6, randomX3,yelloweCarY, 70, 110);
-// Update the drawCar method
+                //drawCar(gl, 6, randomX3,yelloweCarY, 70, 110);
+                // Update the drawCar method
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
             }
         } catch (Exception ex) {
