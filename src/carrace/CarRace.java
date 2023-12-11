@@ -264,7 +264,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 //            audios = new AudioStream(music);
 //            music1 = new FileInputStream(new File("Music//car.wav"));
 //            audios1 = new AudioStream(music1);
-              File musicFile = new File("path/to/your/musicfile.wav");
+//              File musicFile = new File("path/to/your/musicfile.wav");
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
