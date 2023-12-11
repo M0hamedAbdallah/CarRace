@@ -15,9 +15,6 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import java.awt.Font;
 import com.sun.opengl.util.j2d.TextRenderer;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 /**
@@ -29,7 +26,7 @@ import javax.swing.JFrame;
  * @author Timo
  */
 public class CarRace extends AnimListener implements GLEventListener, MouseListener {
-    GL gl;
+
     String name;
     JFrame frame;
     int x, y;
@@ -40,13 +37,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean HIGHSCORE = false;
     boolean MultiPlayer = false;
     String Name;
-    int backgroundY=0;
-    boolean reverseBackground = false;
-
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png", "howtoplay.png", "HIGH-SCORE.png", "background.png"
+        "Window.png", "howtoplay.png", "HIGH-SCORE.png"
     };
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
@@ -89,7 +83,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         gl.glDisable(GL.GL_BLEND);
     }
-
+    
     public void squreINLeft(GL gl, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
@@ -106,17 +100,17 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glVertex3f(700, 0f, -1.0f);
 
         gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(700, 700, -1.0f);
+        gl.glVertex3f(700f, 700f, -1.0f);
 
         gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(0f, 700, -1.0f);
+        gl.glVertex3f(0f, 700f, -1.0f);
 
         gl.glEnd();
         gl.glPopMatrix();
 
         gl.glDisable(GL.GL_BLEND);
     }
-
+    
     @Override
     public void init(GLAutoDrawable gld) {
         GL gl = gld.getGL();
@@ -177,10 +171,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 printHighScoreName();
             }
             if (MultiPlayer) {
-                moveBackground();
-                drawBackground(gl);
-
-
+                squreOfHome(gl, 3);
             }
 
         } catch (Exception ex) {
@@ -188,48 +179,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         }
 
     }
-    
-    
-    
-    
-    private void moveBackground() {
-    int backgroundSpeed = 5;
-
-    backgroundY += backgroundSpeed;
-    if (backgroundY >= 700) {
-        backgroundY = 0;  
-    }
-}
-
-private void drawBackground(GL gl) {
-    gl.glEnable(GL.GL_BLEND);   
-    gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[3]); 
-
-    gl.glPushMatrix();
-
-    gl.glBegin(GL.GL_QUADS);
-
-    gl.glTexCoord2f(0.0f, backgroundY / 700.0f);
-    gl.glVertex3f(0f, 0f, -1.0f);
-
-    gl.glTexCoord2f(1.0f, backgroundY / 700.0f);
-    gl.glVertex3f(700f, 0f, -1.0f);
-
-    gl.glTexCoord2f(1.0f, (backgroundY + 700f) / 700.0f);
-    gl.glVertex3f(700f, 700f, -1.0f);
-
-    gl.glTexCoord2f(0.0f, (backgroundY + 700f) / 700.0f);
-    gl.glVertex3f(0f, 700f, -1.0f);
-
-    gl.glEnd();
-    gl.glPopMatrix();
-
-    gl.glDisable(GL.GL_BLEND);
-}
-    
-    
-    
-    
 
     public void printHighScoreName() {
         GL gl = glc.getGL();
@@ -312,12 +261,8 @@ private void drawBackground(GL gl) {
                 System.out.println("MultiPlayer");
                 home = false;
                 MultiPlayer = true;
-                x = 1200;
-                y = 1200;
-                frame.setSize(1200, 1200);
-                frame.setLocationRelativeTo(null);
-                centerWindow(frame);
-                glc.repaint();
+                x = x * 2;
+                frame.setSize(1400, 700);
             }
 //            else {
 //                    musicOn = true;
@@ -377,21 +322,5 @@ private void drawBackground(GL gl) {
 
     public static void main(String[] args) {
         new frame().setVisible(true);
-    }
-    
-    public void centerWindow(Component frame) {
-        Dimension screenSize
-                = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = frame.getSize();
-        if (frameSize.width > screenSize.width) {
-            frameSize.width = screenSize.width;
-        }
-        if (frameSize.height > screenSize.height) {
-            frameSize.height = screenSize.height;
-        }
-        frame.setLocation(
-                (screenSize.width - frameSize.width) >> 1,
-                (screenSize.height - frameSize.height) >> 1
-        );
     }
 }
