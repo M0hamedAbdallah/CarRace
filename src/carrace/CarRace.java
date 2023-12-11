@@ -601,16 +601,16 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glBegin(GL.GL_QUADS);
 
         gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3f(0, 0, -1.0f); // Top-left corner
+        gl.glVertex3f(0, 0, -1.0f);
 
         gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(100, 0, -1.0f); // Top-right corner
+        gl.glVertex3f(100, 0, -1.0f);
 
         gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(100, 100, -1.0f); // Bottom-right corner
+        gl.glVertex3f(100, 100, -1.0f);
 
         gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(0, 100, -1.0f); // Bottom-left corner
+        gl.glVertex3f(0, 100, -1.0f);
 
         gl.glEnd();
         gl.glPopMatrix();
