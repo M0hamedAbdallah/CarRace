@@ -75,7 +75,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int backgroundY = 0;
 
     ///multi position
-    int x_Car_multi_one = 370, y_Car_multi_one = -50, x_Car_multi_two = 370*2, y_Car_multi_two = -50;
+    int x_Car_multi_one = 370, y_Car_multi_one = -50, x_Car_multi_two = 753, y_Car_multi_two = -50;
     boolean puase = false;
 
     //Assets/thephoto.png
@@ -96,7 +96,9 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         "Barrel_01.png", //12
          "HP_Bonus.png", //13
          "Oil.png"       //14
+
     };
+    
 
     int highScore = 0;
 
@@ -366,6 +368,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     if(y_Car_multi_one < 20){
                         y_Car_multi_one += 5;
                     }
+                    if(y_Car_multi_two < 20){
+                        y_Car_multi_two += 5;
+                    }
+                    
                     moveBackground();
                     drawBackground(gl);
                     gl.glPushMatrix();
@@ -373,6 +379,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     TheCarMultiOne(gl, 8);
                     gl.glPopMatrix();
                 
+                    
+                    gl.glPushMatrix();
+                    gl.glTranslated(x_Car_multi_two, y_Car_multi_two, 0);
+                    TheCarMultiOne(gl, 12);
+                    gl.glPopMatrix();
+                    
+                    
                     gl.glPushMatrix();
                     gl.glTranslated(20, y - 80, 0);
                     squreSettings(gl, 9);
@@ -389,6 +402,9 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     squreSettings(gl, 11);
                     gl.glPopMatrix();
                 }
+                
+            
+                
             }
             if (hardlevel) {
                 squreOfHome(gl, 3);
@@ -663,6 +679,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             }
             if (isKeyPressed(KeyEvent.VK_A) && x_Car_multi_one > 190 && !puase) {
                 x_Car_multi_one -= 5;
+            }
+            if (isKeyPressed(KeyEvent.VK_RIGHT ) && x_Car_multi_two < 944 ) {
+                x_Car_multi_two += 5;
+            }
+            if (isKeyPressed(KeyEvent.VK_LEFT) && x_Car_multi_two > x / 2  ) {
+                x_Car_multi_two -= 5;
             }
         }
         if (hardlevel) {
