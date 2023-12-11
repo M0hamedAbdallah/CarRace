@@ -77,26 +77,27 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png",
-        "howtoplay.png",
-        "HIGH-SCORE.png",
-        "background.png",
-        "Orange Car.png",
-        "Purple Car.png",
-        "yellow car.png",
-        "Red Car.png",
-        "CarOne.png",
-        "Pause_BTN.png",  //9
-        "Close_BTN.png", //10
-        "Play_BTN.png",  //11
-        "Barrel_01.png", //12
-         "HP_Bonus.png", //13
-         "Oil.png",       //14
+        "Window.png",       //0
+        "howtoplay.png",    //1
+        "HIGH-SCORE.png",   //2
+        "background.png",   //3
+        "Orange Car.png",   //4
+        "Purple Car.png",   //5
+        "yellow car.png",   //6
+        "Red Car.png",      //7
+        "CarOne.png",       //8 
+        "Pause_BTN.png",    //9
+        "Close_BTN.png",    //10
+        "Play_BTN.png",     //11
+        "Barrel_01.png",    //12
+         "HP_Bonus.png",    //13
+         "Oil.png",         //14
           "background.png", //15
-            "1.png",
-            "2.png",
-            "3.png",
-            "4.png"
+            "1.png",        //16
+            "2.png",        //17
+            "3.png",        //18
+            "4.png",        //19
+            "CarTwo.png"    //20
     };
     
 
@@ -453,7 +454,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     
                     gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_two, y_Car_multi_two, 0);
-                    TheCarMultiOne(gl, 12);
+                    TheCarMultiOne(gl, 20);
                     gl.glPopMatrix();
                     
                     
@@ -933,7 +934,9 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     GLCanvas glc;
 
     public static void main(String[] args) {
-        new frame().setVisible(true);
+        JFrame frme= new frame();
+        frme.setLocationRelativeTo(null);
+        frme.setVisible(true);    
     }
 
     public void centerWindow(Component frame) {
