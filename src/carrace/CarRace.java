@@ -21,8 +21,12 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  *
@@ -86,6 +90,15 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
     int score;
+
+    ///music
+    FileInputStream music;
+    private AudioStream audios;
+    boolean musicOn = true;
+    FileInputStream music1;
+    private AudioStream audios1;
+    boolean musicOn1 = true;
+    ///endmusic
 
     private int rand(int i) {
         Random rand = new Random();
@@ -243,13 +256,17 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         // Update the orthographic projection based on the new size
         updateOrtho(gl);
-//        try {
-//            music = new FileInputStream(new File("Music//chicken dance song.wav"));
-//            audios = new AudioStream(music);
-//        } catch (IOException ex) {
-//            System.err.println(ex.getMessage());
-//        }
-//        AudioPlayer.player.start(audios);
+        try {
+            music = new FileInputStream(new File("Music//rom.wav"));
+            audios = new AudioStream(music);
+            music1 = new FileInputStream(new File("Music//car.wav"));
+            audios1 = new AudioStream(music1);
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+        AudioPlayer.player.start(audios);
+        AudioPlayer.player.start(audios1);
+
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -514,6 +531,17 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("Hard Level");
                 home = false;
                 hardlevel = true;
+            } else if ((mx > 534 && mx < 589) && (my > (621) && my < (669))) {
+                System.out.println("sound");
+                if (musicOn) {
+                    musicOn = false;
+                    AudioPlayer.player.stop(audios);
+                    AudioPlayer.player.stop(audios1);
+                } else {
+                    musicOn = true;
+                    AudioPlayer.player.start(audios);
+                    AudioPlayer.player.start(audios1);
+                }
             }
 //            else {
 //                    musicOn = true;
@@ -534,7 +562,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 HIGHSCORE = false;
             }
         }
-        if(MultiPlayer){
+        if (MultiPlayer) {
             if ((mx > 1105 && mx < 1174) && (my > (624) && my < (692))) {
                 System.out.println("return");
                 home = true;
