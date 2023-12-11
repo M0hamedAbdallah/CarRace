@@ -25,8 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
+//import sun.audio.AudioPlayer;
+//import sun.audio.AudioStream;
 
 /**
  *
@@ -51,13 +51,20 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean MultiPlayer = false;
 
     int orangeCarY = 0;
-    int purpleCarY = 0;
-    int yelloweCarY = 0;
+    int LeftLeftpurpleCarY = 0;
+    int LeftRightorangeCarY = 0;
+    int RightLeftpurpleCarY = 0;
+    int RightRightorangeCarY = 0;
+    int Rightoil = 0;
+    int Leftoil = 0;
+    int RightBarrel = 0;
+    int LeftBarrel = 0;
 
     float carSpeed = 2.0f;
-    int randomX1 = 0;
-    int randomX2 = 0;
-    int randomX3 = 0;
+    float oilSpeed = 2.0f;
+    float BarrelSpeed = 2.0f;
+    int [] randomX = {294, 190, 407, 520 };
+
     // Add these variables to your class
     int redCarX = 340;
     int redCarY = 83;
@@ -83,9 +90,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         "yellow car.png",
         "Red Car.png",
         "CarOne.png",
-        "Pause_BTN.png",//9
-        "Close_BTN.png",//10
-        "Play_BTN.png",//11
+        "Pause_BTN.png",  //9
+        "Close_BTN.png", //10
+        "Play_BTN.png",  //11
+        "Barrel_01.png", //12
+         "HP_Bonus.png", //13
+         "Oil.png"       //14
     };
 
     int highScore = 0;
@@ -359,32 +369,51 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 squreOfHome(gl, 3);
 
                 // Update y-positions of the cars to make them move
-                orangeCarY -= carSpeed + 13;
-                purpleCarY -= carSpeed + 14;
-//                yelloweCarY -= carSpeed + 9;
+                LeftRightorangeCarY -= carSpeed + 14;
+                LeftLeftpurpleCarY -= carSpeed + 14;
+                RightLeftpurpleCarY -= carSpeed + 14;
+                RightRightorangeCarY -= carSpeed + 14;
+                Rightoil -= oilSpeed + 10;
+                Leftoil -= BarrelSpeed + 10;
+                RightBarrel -= oilSpeed + 10;
+                LeftBarrel -= BarrelSpeed + 10;
 
-                // Reset positions if the cars go off-screen
-                if (orangeCarY < -100) {
-                    orangeCarY = y;
-                    randomX1 = rand(543 - 145) + 145;
+                if (LeftRightorangeCarY < -500) {
+                    LeftRightorangeCarY = y;
                 }
-                if (purpleCarY < -100) {
-                    purpleCarY = y;
-                    randomX2 = rand(543 - 145) + 145;
+                if (LeftLeftpurpleCarY < -300) {
+                    LeftLeftpurpleCarY = y;
+
+                }if (RightLeftpurpleCarY < -1000) {
+                    RightLeftpurpleCarY = y;
+
+                }if (RightRightorangeCarY < -200) {
+                    RightRightorangeCarY = y;
+
                 }
-//                if (yelloweCarY < -100) {
-//                    yelloweCarY = y;
-//                    randomX3 = rand(543 - 145) + 145;
-//                }
 
-                // Draw the orange car
-                drawCar(gl, 4, randomX1, orangeCarY, 70, 110);
+                if (Rightoil < -3000) {
+                    Rightoil = y;
 
-                // Draw the purple car
-                drawCar(gl, 5, randomX2, purpleCarY, 70, 110);
+                }if (Leftoil < -5000) {
+                    Leftoil = y;
+                }if (RightBarrel < -6000) {
+                    RightBarrel = y;
 
-//                drawCar(gl, 6, randomX3,yelloweCarY, 70, 110);
-// Update the drawCar method
+                }if (LeftBarrel < -2000) {
+                    LeftBarrel = y;
+                }
+
+                drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
+                drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
+                drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
+                drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
+
+                drawCar(gl, 14, randomX[0], Rightoil, 100, 110);
+                drawCar(gl, 12, randomX[1], LeftBarrel, 100, 110);
+                drawCar(gl, 12, randomX[2], RightBarrel, 100, 110);
+                drawCar(gl, 14, randomX[3], Leftoil, 100, 110);
+                // Draw the Red car
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
             }
         } catch (Exception ex) {
