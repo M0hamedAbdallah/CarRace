@@ -22,14 +22,11 @@ import javax.swing.JFrame;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-//import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-//import sun.audio.AudioPlayer;
-//import sun.audio.AudioStream;
 
 /**
  *
@@ -101,6 +98,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     private Clip backgroundMusic;
     private Clip backgroundMusic2;
     boolean musicOn = true;
+
     ///endmusic
     private int rand(int i) {
         Random rand = new Random();
@@ -303,7 +301,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             }
         }
     }
-    
+
     private void playMusic() {
         if (backgroundMusic != null && !backgroundMusic.isRunning()) {
             backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
@@ -356,17 +354,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if (MultiPlayer) {
                 if (!puase) {
                     moveBackground();
-                }
-                if (!puase) {
                     drawBackground(gl);
-                }
-                gl.glPushMatrix();
-                if (!puase) {
+                    gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
-                }
-                TheCarMultiOne(gl, 8);
-                gl.glPopMatrix();
-                if (!puase) {
+                    TheCarMultiOne(gl, 8);
+                    gl.glPopMatrix();
+                
                     gl.glPushMatrix();
                     gl.glTranslated(20, y - 80, 0);
                     squreSettings(gl, 9);
@@ -608,14 +601,18 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         }
         if (MultiPlayer) {
             if ((mx > 1105 && mx < 1174) && (my > (624) && my < (692))) {
-                System.out.println("return");
-                home = true;
-                MultiPlayer = false;
-                x = 700;
-                y = 700;
-                frame.setSize(700, 700);
-                centerWindow(frame);
-                glc.repaint();
+                if (!puase) {
+                    System.out.println("return");
+                    home = true;
+                    MultiPlayer = false;
+                    x = 700;
+                    y = 700;
+                    frame.setSize(700, 700);
+                    centerWindow(frame);
+                    glc.repaint();
+                } else {
+                    puase = false;
+                }
             }
             if ((mx > 19 && mx < 88) && (my > (624) && my < (692))) {
                 System.out.println("puase");
@@ -629,10 +626,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     //will use this to control to cars in maltu and in one player
     public void handleKeyPress() {
         if (MultiPlayer) {
-            if (isKeyPressed(KeyEvent.VK_D) && x_Car_multi_one < x / 2 - 70) {
+            if (isKeyPressed(KeyEvent.VK_D) && x_Car_multi_one < x / 2 - 70 && !puase) {
                 x_Car_multi_one += 5;
             }
-            if (isKeyPressed(KeyEvent.VK_A) && x_Car_multi_one > 190) {
+            if (isKeyPressed(KeyEvent.VK_A) && x_Car_multi_one > 190 && !puase) {
                 x_Car_multi_one -= 5;
             }
         }
