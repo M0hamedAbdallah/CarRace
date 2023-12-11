@@ -4,6 +4,8 @@
  */
 package carrace;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -154,8 +156,13 @@ public class frame extends javax.swing.JFrame {
     }//GEN-LAST:event_nameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new STart(new CarRace(name.getText(),700,700), name.getText());
-        this.setVisible(false);
+        JFrame obNull = null;
+        if (!name.getText().equals("")) {
+            new STart(new CarRace(name.getText(), 700, 700, obNull), name.getText());
+            this.setVisible(false);
+        }else{
+            JOptionPane.showMessageDialog(this, "The Name is Empty");
+        };
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

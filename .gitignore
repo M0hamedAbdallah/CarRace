@@ -1,0 +1,16 @@
+# Folders
+.idea/
+build/classes/
+build/classes/Textures/
+build/classes/carrace/
+nbproject/
+out/
+
+# Files
+manifest.mf
+CarRace.iml
+build.xml
+nbproject/project.properties
+*.properties
+*.class
+nbproject/project.properties
