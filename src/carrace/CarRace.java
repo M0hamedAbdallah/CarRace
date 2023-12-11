@@ -116,11 +116,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         return rand.nextInt(i + 1);
     }
 
-    public CarRace(String name, int width, int hight, JFrame frame) {
+    public CarRace(String name, int width, int hight) {
         this.name = name;
         x = width;
         y = hight;
-        this.frame = frame;
     }
 
     public void readHighScore() {

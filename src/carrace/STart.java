@@ -17,7 +17,7 @@ public class STart extends JFrame {
         GLCanvas glcanvas;
         Animator animator;
         
-        CarRace md = new CarRace(name,x,y,this);
+        CarRace md = new CarRace(name,x,y);
         setResizable(false);
         glcanvas = new GLCanvas();
 
