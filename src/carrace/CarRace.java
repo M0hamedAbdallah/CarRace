@@ -19,14 +19,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 /**
  *
@@ -47,71 +39,19 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean home = true;
     boolean howToPlay = false;
     boolean HIGHSCORE = false;
-    boolean hardlevel = false;
     boolean MultiPlayer = false;
-
-    int orangeCarY = 0;
-    int LeftLeftpurpleCarY = 0;
-    int LeftRightorangeCarY = 0;
-    int RightLeftpurpleCarY = 0;
-    int RightRightorangeCarY = 0;
-    int Rightoil = 0;
-    int Leftoil = 0;
-    int RightBarrel = 0;
-    int LeftBarrel = 0;
-
-    float carSpeed = 2.0f;
-    float oilSpeed = 2.0f;
-    float BarrelSpeed = 2.0f;
-    int [] randomX = {294, 190, 407, 520 };
-
-    // Add these variables to your class
-    int redCarX = 340;
-    int redCarY = 83;
-    float redCarSpeed = 5.0f;
-
-    int roadleftLine = 143;
-    int roadrightLine = 543;
+    String Name;
     int backgroundY = 0;
-
-    ///multi position
-    int x_Car_multi_one = 370, y_Car_multi_one = -50, x_Car_multi_two = 753, y_Car_multi_two = -50;
-    boolean puase = false;
+    boolean reverseBackground = false;
 
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png",
-        "howtoplay.png",
-        "HIGH-SCORE.png",
-        "background.png",
-        "Orange Car.png",
-        "Purple Car.png",
-        "yellow car.png",
-        "Red Car.png",
-        "CarOne.png",
-        "Pause_BTN.png",  //9
-        "Close_BTN.png", //10
-        "Play_BTN.png",  //11
-        "Barrel_01.png", //12
-         "HP_Bonus.png", //13
-         "Oil.png",       //14
-          "background.png" //15
+        "Window.png", "howtoplay.png", "HIGH-SCORE.png", "background.png"
     };
-    
-
-    int highScore = 0;
-
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
-    int score;
 
-    ///music
-    private Clip backgroundMusic;
-    private Clip backgroundMusic2;
-    boolean musicOn = true;
-
-    ///endmusic
     private int rand(int i) {
         Random rand = new Random();
         return rand.nextInt(i + 1);
@@ -122,25 +62,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         x = width;
         y = hight;
         this.frame = frame;
-    }
-
-    public void readHighScore() {
-        try ( BufferedReader br = new BufferedReader(new FileReader("highscore.txt"))) {
-            String line = br.readLine();
-            if (line != null) {
-                highScore = Integer.parseInt(line);
-            }
-        } catch (IOException | NumberFormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void writeHighScore() {
-        try ( BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.txt"))) {
-            bw.write(Integer.toString(highScore));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void squreOfHome(GL gl, int index) {
@@ -170,7 +91,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glDisable(GL.GL_BLEND);
     }
 
-    public void squreSettings(GL gl, int index) {
+    public void squreINLeft(GL gl, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
 
@@ -183,73 +104,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glVertex3f(0f, 0f, -1.0f);
 
         gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(70, 0f, -1.0f);
+        gl.glVertex3f(1200, 0f, -1.0f);
 
         gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(70, 70, -1.0f);
+        gl.glVertex3f(1200, 700, -1.0f);
 
         gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(0f, 70, -1.0f);
-
-        gl.glEnd();
-        gl.glPopMatrix();
-
-        gl.glDisable(GL.GL_BLEND);
-    }
-
-    public void drawCar(GL gl, int index, int xPos, int yPos, int width, int height) {
-        gl.glEnable(GL.GL_BLEND);   // Turn Blending On
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
-
-        gl.glPushMatrix();
-
-        // Set the position of the car
-        gl.glTranslatef(xPos, yPos, 0);
-
-        // Adjust the scaling factor based on direction (positive or negative)
-        gl.glScalef(0.7f, 0.7f, 1.0f);
-
-        gl.glBegin(GL.GL_QUADS);
-
-        // Front Face
-        gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3f(-width / 2, -height / 2, -1.0f);
-
-        gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(width / 2, -height / 2, -1.0f);
-
-        gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(width / 2, height / 2, -1.0f);
-
-        gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(-width / 2, height / 2, -1.0f);
-
-        gl.glEnd();
-        gl.glPopMatrix();
-
-        gl.glDisable(GL.GL_BLEND);
-    }
-
-    public void TheCarMultiOne(GL gl, int index) {
-        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
-
-        gl.glPushMatrix();
-
-        gl.glBegin(GL.GL_QUADS);
-
-        // Front Face
-        gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3f(0f, 0f, -1.0f);
-
-        gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(70, 0f, -1.0f);
-
-        gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(70, 100, -1.0f);
-
-        gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(0f, 100, -1.0f);
+        gl.glVertex3f(0f, 700, -1.0f);
 
         gl.glEnd();
         gl.glPopMatrix();
@@ -268,25 +129,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         // Update the orthographic projection based on the new size
         updateOrtho(gl);
-        try {
-//            music = new FileInputStream(new File("Music//rom.wav"));
+//        try {
+//            music = new FileInputStream(new File("Music//chicken dance song.wav"));
 //            audios = new AudioStream(music);
-//            music1 = new FileInputStream(new File("Music//car.wav"));
-//            audios1 = new AudioStream(music1);
-            File musicFile = new File("Music//car.wav");
-            File musicFile2 = new File("Music//rom.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(musicFile);
-            AudioInputStream audioInputStream2 = AudioSystem.getAudioInputStream(musicFile2);
-            backgroundMusic = AudioSystem.getClip();
-            backgroundMusic2 = AudioSystem.getClip();
-            backgroundMusic.open(audioInputStream);
-            backgroundMusic2.open(audioInputStream2);
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
+//        } catch (IOException ex) {
+//            System.err.println(ex.getMessage());
+//        }
 //        AudioPlayer.player.start(audios);
-//        AudioPlayer.player.start(audios1);
-        playMusic();
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -314,29 +163,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         }
     }
 
-    private void playMusic() {
-        if (backgroundMusic != null && !backgroundMusic.isRunning()) {
-            backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
-            backgroundMusic2.loop(Clip.LOOP_CONTINUOUSLY);
-        }
-    }
-
-    // Call this method to stop the background music
-    private void stopMusic() {
-        if (backgroundMusic != null && backgroundMusic.isRunning()) {
-            backgroundMusic.stop();
-            backgroundMusic2.stop();
-        }
-    }
-
-    // Call this method to rewind the background music to the beginning
-    private void rewindMusic() {
-        if (backgroundMusic != null) {
-            backgroundMusic.setFramePosition(0);
-            backgroundMusic2.setFramePosition(0);
-        }
-    }
-
     private void updateOrtho(GL gl) {
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
@@ -347,7 +173,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     @Override
     public void display(GLAutoDrawable gld) {
-        handleKeyPress();
         try {
             GL gl = gld.getGL();
             gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
@@ -361,103 +186,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if (HIGHSCORE) {
                 squreOfHome(gl, 2);
                 printHighScoreName();
-                printHighScoreNumber();
             }
             if (MultiPlayer) {
-                if (!puase) {
-                    if(y_Car_multi_one < 20){
-                        y_Car_multi_one += 5;
-                    }
-                    if(y_Car_multi_two < 20){
-                        y_Car_multi_two += 5;
-                    }
-                    
-                    moveBackground();
-                    drawBackground(gl);
-                    gl.glPushMatrix();
-                    gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
-                    TheCarMultiOne(gl, 8);
-                    gl.glPopMatrix();
-                
-                    
-                    gl.glPushMatrix();
-                    gl.glTranslated(x_Car_multi_two, y_Car_multi_two, 0);
-                    TheCarMultiOne(gl, 12);
-                    gl.glPopMatrix();
-                    
-                    
-                    gl.glPushMatrix();
-                    gl.glTranslated(20, y - 80, 0);
-                    squreSettings(gl, 9);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(x - 80, y - 80, 0);
-                    squreSettings(gl, 10);
-                    gl.glPopMatrix();
-                }
-                if (puase) {
-                    gl.glPushMatrix();
-                    gl.glTranslated(x - 80, y - 80, 0);
-                    squreSettings(gl, 11);
-                    gl.glPopMatrix();
-                }
-                
-            
-                
-            }
-            if (hardlevel) {
                 moveBackground();
-                drawHardBackground(gl);
+                drawBackground(gl);
 
-                // Update y-positions of the cars to make them move
-                LeftRightorangeCarY -= carSpeed + 14;
-                LeftLeftpurpleCarY -= carSpeed + 14;
-                RightLeftpurpleCarY -= carSpeed + 14;
-                RightRightorangeCarY -= carSpeed + 14;
-                Rightoil -= oilSpeed + 10;
-                Leftoil -= BarrelSpeed + 10;
-                RightBarrel -= oilSpeed + 10;
-                LeftBarrel -= BarrelSpeed + 10;
-
-                if (LeftRightorangeCarY < -500) {
-                    LeftRightorangeCarY = y;
-                }
-                if (LeftLeftpurpleCarY < -300) {
-                    LeftLeftpurpleCarY = y;
-
-                }if (RightLeftpurpleCarY < -1000) {
-                    RightLeftpurpleCarY = y;
-
-                }if (RightRightorangeCarY < -200) {
-                    RightRightorangeCarY = y;
-
-                }
-
-                if (Rightoil < -3000) {
-                    Rightoil = y;
-
-                }if (Leftoil < -5000) {
-                    Leftoil = y;
-                }if (RightBarrel < -6000) {
-                    RightBarrel = y;
-
-                }if (LeftBarrel < -2000) {
-                    LeftBarrel = y;
-                }
-
-                drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
-                drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
-                drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
-                drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
-
-                drawCar(gl, 14, randomX[0], Rightoil, 100, 110);
-                drawCar(gl, 12, randomX[1], LeftBarrel, 100, 110);
-                drawCar(gl, 12, randomX[2], RightBarrel, 100, 110);
-                drawCar(gl, 14, randomX[3], Leftoil, 100, 110);
-                // Draw the Red car
-                drawCar(gl, 7, redCarX, redCarY, 70, 110);
             }
+
         } catch (Exception ex) {
 
         }
@@ -465,7 +200,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     }
 
     private void moveBackground() {
-        int backgroundSpeed = 10;
+        int backgroundSpeed = 5;
 
         backgroundY += backgroundSpeed;
         if (backgroundY >= 700) {
@@ -498,31 +233,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         gl.glDisable(GL.GL_BLEND);
     }
-    private void drawHardBackground(GL gl) {
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[15]);
-
-        gl.glPushMatrix();
-
-        gl.glBegin(GL.GL_QUADS);
-
-        gl.glTexCoord2f(0.0f, backgroundY / 700.0f);
-        gl.glVertex3f(0f, 0f, -1.0f);
-
-        gl.glTexCoord2f(1.0f, backgroundY / 700.0f);
-        gl.glVertex3f(700, 0f, -1.0f);
-
-        gl.glTexCoord2f(1.0f, (backgroundY + 700f) / 700.0f);
-        gl.glVertex3f(700, 700f, -1.0f);
-
-        gl.glTexCoord2f(0.0f, (backgroundY + 700f) / 700.0f);
-        gl.glVertex3f(0f, 700f, -1.0f);
-
-        gl.glEnd();
-        gl.glPopMatrix();
-
-        gl.glDisable(GL.GL_BLEND);
-    }
 
     public void printHighScoreName() {
         GL gl = glc.getGL();
@@ -539,26 +249,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         textRenderer.beginRendering(glc.getWidth(), glc.getHeight());
         textRenderer.draw(name, xPos, yPos);
-        textRenderer.endRendering();
-
-        gl.glPopMatrix();
-    }
-
-    public void printHighScoreNumber() {
-        GL gl = glc.getGL();
-        TextRenderer textRenderer = new TextRenderer(new Font("RACE SPACE STR", Font.PLAIN, 30));
-
-        int xPos = 330;
-        int yPos = 190;
-
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
-        gl.glMatrixMode(GL.GL_MODELVIEW);
-        gl.glPushMatrix();
-        gl.glLoadIdentity();
-        gl.glTranslatef(xPos, yPos, 0);
-
-        textRenderer.beginRendering(glc.getWidth(), glc.getHeight());
-        textRenderer.draw(String.valueOf(highScore), xPos, yPos);
         textRenderer.endRendering();
 
         gl.glPopMatrix();
@@ -637,22 +327,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 frame.setSize(1200, 700);
                 centerWindow(frame);
                 glc.repaint();
-
-//                readHighScore();
-//                System.out.println("High Score: " + highScore);
-            } else if ((mx > 205 && mx < 481) && (my > (522) && my < (575))) {
-                System.out.println("Hard Level");
-                home = false;
-                hardlevel = true;
-            } else if ((mx > 534 && mx < 589) && (my > (621) && my < (669))) {
-                System.out.println("sound");
-                if (musicOn) {
-                    musicOn = false;
-                    stopMusic();
-                } else {
-                    musicOn = true;
-                    playMusic();
-                }
             }
 //            else {
 //                    musicOn = true;
@@ -673,67 +347,15 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 HIGHSCORE = false;
             }
         }
-        if (MultiPlayer) {
-            if ((mx > 1105 && mx < 1174) && (my > (624) && my < (692))) {
-                if (!puase) {
-                    System.out.println("return");
-                    home = true;
-                    MultiPlayer = false;
-                    x = 700;
-                    y = 700;
-                    frame.setSize(700, 700);
-                    centerWindow(frame);
-                    glc.repaint();
-                } else {
-                    puase = false;
-                }
-            }
-            if ((mx > 19 && mx < 88) && (my > (624) && my < (692))) {
-                System.out.println("puase");
-                puase = true;
-            }
-        }
-
     }
 
     /////////////////////////////////////
     //will use this to control to cars in maltu and in one player
     public void handleKeyPress() {
-        if (MultiPlayer) {
-            if (isKeyPressed(KeyEvent.VK_D) && x_Car_multi_one < x / 2 - 70 && !puase) {
-                x_Car_multi_one += 5;
-            }
-            if (isKeyPressed(KeyEvent.VK_A) && x_Car_multi_one > 190 && !puase) {
-                x_Car_multi_one -= 5;
-            }
-            if (isKeyPressed(KeyEvent.VK_RIGHT ) && x_Car_multi_two < 944 ) {
-                x_Car_multi_two += 5;
-            }
-            if (isKeyPressed(KeyEvent.VK_LEFT) && x_Car_multi_two > x / 2  ) {
-                x_Car_multi_two -= 5;
-            }
-        }
-        if (hardlevel) {
-            if (isKeyPressed(KeyEvent.VK_LEFT) && redCarX > roadleftLine + 30) {
-                redCarX -= redCarSpeed;
-            }
-            if (isKeyPressed(KeyEvent.VK_RIGHT) && redCarX + 15 < roadrightLine) {
-                redCarX += redCarSpeed;
-            }
-            if (isKeyPressed(KeyEvent.VK_UP) && redCarY + 50 < y) {
-                redCarY += redCarSpeed;
-            }
-            if (isKeyPressed(KeyEvent.VK_DOWN) && redCarY > 50) {
-                redCarY -= redCarSpeed;
-            }
-        }
 
-//            if (score > highScore) {
-//                highScore = score;
-//                writeHighScore();
-//                System.out.println("New High Score: " + highScore);
-//            }
-//        }
+//        if (isKeyPressed(KeyEvent.VK_A)) {
+//            
+//        }  
     }
     ////////////////////////////////////////////////////
 
