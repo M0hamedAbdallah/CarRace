@@ -19,6 +19,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 /**
  *
@@ -39,11 +43,14 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean home = true;
     boolean howToPlay = false;
     boolean HIGHSCORE = false;
+
     boolean MultiPlayer = false;
     String Name;
     int backgroundY = 0;
     boolean reverseBackground = false;
 
+
+     int highScore = 0;
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
@@ -51,6 +58,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     };
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
+     int score;
 
     private int rand(int i) {
         Random rand = new Random();
@@ -63,7 +71,23 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         y = hight;
         this.frame = frame;
     }
-
+    public void readHighScore() {
+        try (BufferedReader br = new BufferedReader(new FileReader("highscore.txt"))) {
+            String line = br.readLine();
+            if (line != null) {
+                highScore = Integer.parseInt(line);
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeHighScore() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.txt"))) {
+            bw.write(Integer.toString(highScore));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void squreOfHome(GL gl, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
@@ -186,6 +210,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if (HIGHSCORE) {
                 squreOfHome(gl, 2);
                 printHighScoreName();
+                printHighScoreNumber();
             }
             if (MultiPlayer) {
                 moveBackground();
@@ -254,6 +279,25 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glPopMatrix();
     }
 
+    public void printHighScoreNumber() {
+        GL gl = glc.getGL();
+        TextRenderer textRenderer = new TextRenderer(new Font("RACE SPACE STR", Font.PLAIN, 30));
+
+        int xPos = 330 ;
+        int yPos = 190;
+
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        gl.glTranslatef(xPos, yPos, 0);
+
+        textRenderer.beginRendering(glc.getWidth(), glc.getHeight());
+        textRenderer.draw(String.valueOf(highScore), xPos, yPos);
+        textRenderer.endRendering();
+
+        gl.glPopMatrix();
+    }
     @Override
     public void reshape(GLAutoDrawable glad, int i, int i1, int width, int height) {
 //        x = width;
@@ -327,6 +371,9 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 frame.setSize(1200, 700);
                 centerWindow(frame);
                 glc.repaint();
+
+                readHighScore();
+                System.out.println("High Score: " + highScore);
             }
 //            else {
 //                    musicOn = true;
@@ -352,10 +399,15 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     /////////////////////////////////////
     //will use this to control to cars in maltu and in one player
     public void handleKeyPress() {
-
 //        if (isKeyPressed(KeyEvent.VK_A)) {
-//            
-//        }  
+//            if (score > highScore) {
+//                highScore = score;
+//                writeHighScore();
+//                System.out.println("New High Score: " + highScore);
+//            }
+//        }
+
+
     }
     ////////////////////////////////////////////////////
 
