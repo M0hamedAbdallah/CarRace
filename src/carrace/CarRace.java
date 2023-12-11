@@ -49,6 +49,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean HIGHSCORE = false;
     boolean hardlevel = false;
     boolean MultiPlayer = false;
+    boolean isPaused = false;
 
     int orangeCarY = 0;
     int LeftLeftpurpleCarY = 0;
@@ -71,7 +72,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int score = 0;
     int collisionCount = 0;
     int HP_Bonus = 5;
-
+    long totalElapsedTime = 0;
+    long lastFrameTime = 0;
     ///multi position
     int x_Car_multi_one = 370, y_Car_multi_one = -50, x_Car_multi_two = 753, y_Car_multi_two = -50;
     int Live_multi_one[] = {18, 18, 18, 18, 18}, Live_multi_two[] = {18, 18, 18, 18, 18};
@@ -317,7 +319,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glDisable(GL.GL_BLEND);
     }
 
-    private void drawElapsedTime(GL gl, long elapsedTime) {
+    private void drawElapsedTime(GL gl, long elapsedTime , int posx , int posy) {
         int xPos = 10;
         int yPos = 20;
 
@@ -328,7 +330,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glTranslatef(xPos, yPos, 0);
 
         timerRenderer.beginRendering(glc.getWidth(), glc.getHeight());
-        timerRenderer.draw("Time: " + formatTime(elapsedTime), 0, 0);
+        timerRenderer.draw("Time: " + formatTime(elapsedTime), posx, posy);
         timerRenderer.endRendering();
 
         gl.glPopMatrix();
@@ -504,8 +506,19 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                         y_Car_multi_two += 5;
                     }
 
+
                     moveBackground();
                     drawBackground(gl);
+                    long currentTime = System.currentTimeMillis();
+                    long elapsedTime = 0;
+                    if (!isPaused) {
+                        if (lastFrameTime != 0) {
+                            elapsedTime = currentTime - lastFrameTime;
+                            totalElapsedTime += elapsedTime;
+                        }
+                        lastFrameTime = currentTime;
+                    }
+                    
                     gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
                     TheCarMultiOne(gl, 8);
@@ -587,12 +600,19 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     gl.glTranslated(0, 220, 0);
                     squreLive(gl, Live_multi_one[4]);
                     gl.glPopMatrix();
+                    drawElapsedTime(gl, totalElapsedTime,520,600);
+
                 }
                 if (puase) {
+                    isPaused = true;
                     gl.glPushMatrix();
                     gl.glTranslated(x - 80, y - 80, 0);
                     squreSettings(gl, 11);
                     gl.glPopMatrix();
+                    lastFrameTime = 0; 
+                } 
+                else {
+                    isPaused = false;
                 }
 
             }
@@ -642,7 +662,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 // Draw the Red car
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
-                drawElapsedTime(gl, elapsedTime);
+                drawElapsedTime(gl, elapsedTime,5,5);
                 drawScore(gl, score);
             }
         } catch (Exception ex) {
@@ -911,6 +931,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("MultiPlayer");
                 home = false;
                 MultiPlayer = true;
+                startTime=0;
+                startTime = System.currentTimeMillis();
                 x = 1200;
                 y = 700;
                 frame.setSize(1200, 700);
@@ -923,6 +945,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("Hard Level");
                 home = false;
                 hardlevel = true;
+                startTime=0;
+                startTime = System.currentTimeMillis();
             } else if ((mx > 534 && mx < 589) && (my > (621) && my < (669))) {
                 System.out.println("sound");
                 if (musicOn) {
