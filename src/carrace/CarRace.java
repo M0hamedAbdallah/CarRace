@@ -15,7 +15,14 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import java.awt.Font;
 import com.sun.opengl.util.j2d.TextRenderer;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 /**
  *
@@ -27,6 +34,7 @@ import javax.swing.JFrame;
  */
 public class CarRace extends AnimListener implements GLEventListener, MouseListener {
 
+    GL gl;
     String name;
     JFrame frame;
     int x, y;
@@ -53,14 +61,20 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     int roadleftLine = 143;
      int roadrightLine = 543;
+    int backgroundY = 0;
+    boolean reverseBackground = false;
+
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
         "Window.png", "howtoplay.png", "HIGH-SCORE.png", "background.png", "Orange Car.png", "Purple Car.png", "yellow car.png",
-            "Red Car.png"
-    };
+            "Red Car.png"};
+
+    int highScore = 0;
+
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
+     int score;
 
     private int rand(int i) {
         Random rand = new Random();
@@ -73,7 +87,23 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         y = hight;
         this.frame = frame;
     }
-
+    public void readHighScore() {
+        try (BufferedReader br = new BufferedReader(new FileReader("highscore.txt"))) {
+            String line = br.readLine();
+            if (line != null) {
+                highScore = Integer.parseInt(line);
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeHighScore() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.txt"))) {
+            bw.write(Integer.toString(highScore));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void squreOfHome(GL gl, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
@@ -146,29 +176,31 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glVertex3f(0f, 0f, -1.0f);
 
         gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(700, 0f, -1.0f);
+        gl.glVertex3f(1200, 0f, -1.0f);
 
         gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(700f, 700f, -1.0f);
+        gl.glVertex3f(1200, 700, -1.0f);
 
         gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(0f, 700f, -1.0f);
+        gl.glVertex3f(0f, 700, -1.0f);
 
         gl.glEnd();
         gl.glPopMatrix();
 
         gl.glDisable(GL.GL_BLEND);
     }
-    
+
     @Override
     public void init(GLAutoDrawable gld) {
+//        GL gl = gld.getGL();
+//        gl.glViewport(0, 0, x, y);
+//        gl.glMatrixMode(GL.GL_PROJECTION);
+//        gl.glOrtho(0, x, 0, y, -1.0, 1.0);
         GL gl = gld.getGL();
         gl.glViewport(0, 0, x, y);
-//        gl.glClearColor(0.0f, 1.0f, 0.0f, 1.0f);    //This Will Clear The Background Color To Black
-        gl.glMatrixMode(GL.GL_PROJECTION);
-//        gl.glOrtho(-450, 450, -250, 250, -1.0, 1.0);
-        gl.glOrtho(0, x, 0, y, -1.0, 1.0);
 
+        // Update the orthographic projection based on the new size
+        updateOrtho(gl);
 //        try {
 //            music = new FileInputStream(new File("Music//chicken dance song.wav"));
 //            audios = new AudioStream(music);
@@ -203,6 +235,14 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         }
     }
 
+    private void updateOrtho(GL gl) {
+        gl.glMatrixMode(GL.GL_PROJECTION);
+        gl.glLoadIdentity();
+        gl.glOrtho(0, x, 0, y, -1.0, 1.0);
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glLoadIdentity();
+    }
+
     @Override
     public void display(GLAutoDrawable gld) {
         handleKeyPress();
@@ -219,9 +259,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if (HIGHSCORE) {
                 squreOfHome(gl, 2);
                 printHighScoreName();
+                printHighScoreNumber();
             }
             if (MultiPlayer) {
-                squreOfHome(gl, 3);
+                moveBackground();
+                drawBackground(gl);
+
             }
             if (hardlevel) {
                 squreOfHome(gl, 3);
@@ -261,6 +304,41 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     }
 
+    private void moveBackground() {
+        int backgroundSpeed = 5;
+
+        backgroundY += backgroundSpeed;
+        if (backgroundY >= 700) {
+            backgroundY = 0;
+        }
+    }
+
+    private void drawBackground(GL gl) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[3]);
+
+        gl.glPushMatrix();
+
+        gl.glBegin(GL.GL_QUADS);
+
+        gl.glTexCoord2f(0.0f, backgroundY / 700.0f);
+        gl.glVertex3f(0f, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, backgroundY / 700.0f);
+        gl.glVertex3f(1200, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, (backgroundY + 700f) / 700.0f);
+        gl.glVertex3f(1200, 700f, -1.0f);
+
+        gl.glTexCoord2f(0.0f, (backgroundY + 700f) / 700.0f);
+        gl.glVertex3f(0f, 700f, -1.0f);
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
     public void printHighScoreName() {
         GL gl = glc.getGL();
         TextRenderer textRenderer = new TextRenderer(new Font("RACE SPACE STR", Font.PLAIN, 30));
@@ -281,9 +359,35 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glPopMatrix();
     }
 
-    @Override
-    public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
+    public void printHighScoreNumber() {
+        GL gl = glc.getGL();
+        TextRenderer textRenderer = new TextRenderer(new Font("RACE SPACE STR", Font.PLAIN, 30));
 
+        int xPos = 330 ;
+        int yPos = 190;
+
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        gl.glTranslatef(xPos, yPos, 0);
+
+        textRenderer.beginRendering(glc.getWidth(), glc.getHeight());
+        textRenderer.draw(String.valueOf(highScore), xPos, yPos);
+        textRenderer.endRendering();
+
+        gl.glPopMatrix();
+    }
+    @Override
+    public void reshape(GLAutoDrawable glad, int i, int i1, int width, int height) {
+//        x = width;
+//        y = height;
+
+        GL gl = glad.getGL();
+        gl.glViewport(0, 0, width, height);
+
+        // Update the orthographic projection based on the new size
+        updateOrtho(gl);
     }
 
     @Override
@@ -342,8 +446,14 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("MultiPlayer");
                 home = false;
                 MultiPlayer = true;
-                x = x * 2;
-                frame.setSize(1400, 700);
+                x = 1200;
+                y = 700;
+                frame.setSize(1200, 700);
+                centerWindow(frame);
+                glc.repaint();
+
+                readHighScore();
+                System.out.println("High Score: " + highScore);
             }
             else if ((mx > 205  && mx < 481) && (my > (522) && my < (575))) {
                 System.out.println("Hard Level");
@@ -375,8 +485,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     /////////////////////////////////////
     //will use this to control to cars in maltu and in one player
     public void handleKeyPress() {
-
 //        if (isKeyPressed(KeyEvent.VK_A)) {
+
 //            
 //        }
         if (isKeyPressed(KeyEvent.VK_LEFT) && redCarX > roadleftLine+30 ) {
@@ -391,6 +501,14 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         if (isKeyPressed(KeyEvent.VK_DOWN) && redCarY > 50) {
             redCarY -= redCarSpeed;
         }
+//            if (score > highScore) {
+//                highScore = score;
+//                writeHighScore();
+//                System.out.println("New High Score: " + highScore);
+//            }
+//        }
+
+
     }
     ////////////////////////////////////////////////////
 
@@ -421,5 +539,21 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     public static void main(String[] args) {
         new frame().setVisible(true);
+    }
+
+    public void centerWindow(Component frame) {
+        Dimension screenSize
+                = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = frame.getSize();
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        frame.setLocation(
+                (screenSize.width - frameSize.width) >> 1,
+                (screenSize.height - frameSize.height) >> 1
+        );
     }
 }
