@@ -42,12 +42,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean MultiPlayer = false;
     String Name;
     int backgroundY = 0;
+    int x_Car_multi_one = 200, y_Car_multi_one = 20;
     boolean reverseBackground = false;
 
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png", "howtoplay.png", "HIGH-SCORE.png", "background.png"
+        "Window.png", "howtoplay.png", "HIGH-SCORE.png", "background.png" , "CarOne.png"
     };
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
@@ -91,7 +92,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glDisable(GL.GL_BLEND);
     }
 
-    public void squreINLeft(GL gl, int index) {
+    public void TheCarMultiOne(GL gl, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
 
@@ -104,13 +105,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glVertex3f(0f, 0f, -1.0f);
 
         gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(1200, 0f, -1.0f);
+        gl.glVertex3f(70, 0f, -1.0f);
 
         gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(1200, 700, -1.0f);
+        gl.glVertex3f(70, 100, -1.0f);
 
         gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(0f, 700, -1.0f);
+        gl.glVertex3f(0f, 100, -1.0f);
 
         gl.glEnd();
         gl.glPopMatrix();
@@ -190,7 +191,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if (MultiPlayer) {
                 moveBackground();
                 drawBackground(gl);
-
+                gl.glPushMatrix();
+                gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
+                TheCarMultiOne(gl,4);
+                gl.glPopMatrix();
             }
 
         } catch (Exception ex) {
@@ -200,7 +204,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     }
 
     private void moveBackground() {
-        int backgroundSpeed = 5;
+        int backgroundSpeed = 10;
 
         backgroundY += backgroundSpeed;
         if (backgroundY >= 700) {
