@@ -1,6 +1,8 @@
 # Folders
 .idea/
-build/
+build/classes/
+build/classes/Textures/
+build/classes/carrace/
 nbproject/
 out/
 
@@ -10,4 +12,5 @@ CarRace.iml
 build.xml
 nbproject/project.properties
 *.properties
+*.class
 nbproject/project.properties
