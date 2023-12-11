@@ -75,8 +75,11 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         "Orange Car.png",
         "Purple Car.png",
         "yellow car.png",
-        "Red Car.png" ,
-        "CarOne.png"};
+        "Red Car.png",
+        "CarOne.png",
+        "Pause_BTN.png",//9
+        "Close_BTN.png",//10
+    };
 
     int highScore = 0;
 
@@ -135,6 +138,33 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         gl.glTexCoord2f(0.0f, 1.0f);
         gl.glVertex3f(0f, 700f, -1.0f);
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
+    public void squreSettings(GL gl, int index) {
+        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
+
+        gl.glPushMatrix();
+
+        gl.glBegin(GL.GL_QUADS);
+
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(0f, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(70, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(70, 70, -1.0f);
+
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(0f, 70, -1.0f);
 
         gl.glEnd();
         gl.glPopMatrix();
@@ -279,6 +309,16 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 gl.glPushMatrix();
                 gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
                 TheCarMultiOne(gl, 8);
+                gl.glPopMatrix();
+
+                gl.glPushMatrix();
+                gl.glTranslated(20, y - 80, 0);
+                squreSettings(gl, 9);
+                gl.glPopMatrix();
+
+                gl.glPushMatrix();
+                gl.glTranslated(x - 80, y - 80, 0);
+                squreSettings(gl, 10);
                 gl.glPopMatrix();
             }
             if (hardlevel) {
@@ -467,7 +507,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 frame.setSize(1200, 700);
                 centerWindow(frame);
                 glc.repaint();
-                
+
 //                readHighScore();
 //                System.out.println("High Score: " + highScore);
             } else if ((mx > 205 && mx < 481) && (my > (522) && my < (575))) {
@@ -500,29 +540,35 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     /////////////////////////////////////
     //will use this to control to cars in maltu and in one player
     public void handleKeyPress() {
-//        if (isKeyPressed(KeyEvent.VK_A)) {
+        if (MultiPlayer) {
+            if (isKeyPressed(KeyEvent.VK_D) && x_Car_multi_one < x / 2 - 70) {
+                x_Car_multi_one += 5;
+            }
+            if (isKeyPressed(KeyEvent.VK_A) && x_Car_multi_one > 190) {
+                x_Car_multi_one -= 5;
+            }
+        }
+        if (hardlevel) {
+            if (isKeyPressed(KeyEvent.VK_LEFT) && redCarX > roadleftLine + 30) {
+                redCarX -= redCarSpeed;
+            }
+            if (isKeyPressed(KeyEvent.VK_RIGHT) && redCarX + 15 < roadrightLine) {
+                redCarX += redCarSpeed;
+            }
+            if (isKeyPressed(KeyEvent.VK_UP) && redCarY + 50 < y) {
+                redCarY += redCarSpeed;
+            }
+            if (isKeyPressed(KeyEvent.VK_DOWN) && redCarY > 50) {
+                redCarY -= redCarSpeed;
+            }
+        }
 
-//            
-//        }
-        if (isKeyPressed(KeyEvent.VK_LEFT) && redCarX > roadleftLine + 30) {
-            redCarX -= redCarSpeed;
-        }
-        if (isKeyPressed(KeyEvent.VK_RIGHT) && redCarX + 15 < roadrightLine) {
-            redCarX += redCarSpeed;
-        }
-        if (isKeyPressed(KeyEvent.VK_UP) && redCarY + 50 < y) {
-            redCarY += redCarSpeed;
-        }
-        if (isKeyPressed(KeyEvent.VK_DOWN) && redCarY > 50) {
-            redCarY -= redCarSpeed;
-        }
 //            if (score > highScore) {
 //                highScore = score;
 //                writeHighScore();
 //                System.out.println("New High Score: " + highScore);
 //            }
 //        }
-
     }
     ////////////////////////////////////////////////////
 
