@@ -95,8 +95,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         "Play_BTN.png",  //11
         "Barrel_01.png", //12
          "HP_Bonus.png", //13
-         "Oil.png"       //14
-
+         "Oil.png",       //14
+          "background.png" //15
     };
     
 
@@ -407,7 +407,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 
             }
             if (hardlevel) {
-                squreOfHome(gl, 3);
+                moveBackground();
+                drawHardBackground(gl);
 
                 // Update y-positions of the cars to make them move
                 LeftRightorangeCarY -= carSpeed + 14;
@@ -488,6 +489,31 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         gl.glTexCoord2f(1.0f, (backgroundY + 700f) / 700.0f);
         gl.glVertex3f(1200, 700f, -1.0f);
+
+        gl.glTexCoord2f(0.0f, (backgroundY + 700f) / 700.0f);
+        gl.glVertex3f(0f, 700f, -1.0f);
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+    private void drawHardBackground(GL gl) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[15]);
+
+        gl.glPushMatrix();
+
+        gl.glBegin(GL.GL_QUADS);
+
+        gl.glTexCoord2f(0.0f, backgroundY / 700.0f);
+        gl.glVertex3f(0f, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, backgroundY / 700.0f);
+        gl.glVertex3f(700, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, (backgroundY + 700f) / 700.0f);
+        gl.glVertex3f(700, 700f, -1.0f);
 
         gl.glTexCoord2f(0.0f, (backgroundY + 700f) / 700.0f);
         gl.glVertex3f(0f, 700f, -1.0f);
