@@ -534,6 +534,18 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 HIGHSCORE = false;
             }
         }
+        if(MultiPlayer){
+            if ((mx > 1105 && mx < 1174) && (my > (624) && my < (692))) {
+                System.out.println("return");
+                home = true;
+                MultiPlayer = false;
+                x = 700;
+                y = 700;
+                frame.setSize(700, 700);
+                centerWindow(frame);
+                glc.repaint();
+            }
+        }
 
     }
 
