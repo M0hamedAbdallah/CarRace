@@ -49,7 +49,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean HIGHSCORE = false;
     boolean hardlevel = false;
     boolean MultiPlayer = false;
-    String Name;
+
     int orangeCarY = 0;
     int purpleCarY = 0;
     int yelloweCarY = 0;
@@ -66,8 +66,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int roadleftLine = 143;
     int roadrightLine = 543;
     int backgroundY = 0;
+
+    ///multi position
     int x_Car_multi_one = 200, y_Car_multi_one = 20;
-    boolean reverseBackground = false;
+    boolean puase = false;
 
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
@@ -83,6 +85,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         "CarOne.png",
         "Pause_BTN.png",//9
         "Close_BTN.png",//10
+        "Play_BTN.png",//11
     };
 
     int highScore = 0;
@@ -92,12 +95,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int score;
 
     ///music
-    FileInputStream music;
-    private AudioStream audios;
-    boolean musicOn = true;
-    FileInputStream music1;
-    private AudioStream audios1;
-    boolean musicOn1 = true;
+//    FileInputStream music;
+//    private AudioStream audios;
+//    boolean musicOn = true;
+//    FileInputStream music1;
+//    private AudioStream audios1;
+//    boolean musicOn1 = true;
     ///endmusic
 
     private int rand(int i) {
@@ -257,15 +260,16 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         // Update the orthographic projection based on the new size
         updateOrtho(gl);
         try {
-            music = new FileInputStream(new File("Music//rom.wav"));
-            audios = new AudioStream(music);
-            music1 = new FileInputStream(new File("Music//car.wav"));
-            audios1 = new AudioStream(music1);
-        } catch (IOException ex) {
+//            music = new FileInputStream(new File("Music//rom.wav"));
+//            audios = new AudioStream(music);
+//            music1 = new FileInputStream(new File("Music//car.wav"));
+//            audios1 = new AudioStream(music1);
+              File musicFile = new File("path/to/your/musicfile.wav");
+        } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
-        AudioPlayer.player.start(audios);
-        AudioPlayer.player.start(audios1);
+//        AudioPlayer.player.start(audios);
+//        AudioPlayer.player.start(audios1);
 
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
@@ -321,22 +325,35 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 printHighScoreNumber();
             }
             if (MultiPlayer) {
-                moveBackground();
-                drawBackground(gl);
+                if (!puase) {
+                    moveBackground();
+                }
+                if (!puase) {
+                    drawBackground(gl);
+                }
                 gl.glPushMatrix();
-                gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
+                if (!puase) {
+                    gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
+                }
                 TheCarMultiOne(gl, 8);
                 gl.glPopMatrix();
+                if (!puase) {
+                    gl.glPushMatrix();
+                    gl.glTranslated(20, y - 80, 0);
+                    squreSettings(gl, 9);
+                    gl.glPopMatrix();
 
-                gl.glPushMatrix();
-                gl.glTranslated(20, y - 80, 0);
-                squreSettings(gl, 9);
-                gl.glPopMatrix();
-
-                gl.glPushMatrix();
-                gl.glTranslated(x - 80, y - 80, 0);
-                squreSettings(gl, 10);
-                gl.glPopMatrix();
+                    gl.glPushMatrix();
+                    gl.glTranslated(x - 80, y - 80, 0);
+                    squreSettings(gl, 10);
+                    gl.glPopMatrix();
+                }
+                if(puase){
+                    gl.glPushMatrix();
+                    gl.glTranslated(x - 80, y - 80, 0);
+                    squreSettings(gl, 11);
+                    gl.glPopMatrix();
+                }
             }
             if (hardlevel) {
                 squreOfHome(gl, 3);
@@ -533,15 +550,15 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 hardlevel = true;
             } else if ((mx > 534 && mx < 589) && (my > (621) && my < (669))) {
                 System.out.println("sound");
-                if (musicOn) {
-                    musicOn = false;
-                    AudioPlayer.player.stop(audios);
-                    AudioPlayer.player.stop(audios1);
-                } else {
-                    musicOn = true;
-                    AudioPlayer.player.start(audios);
-                    AudioPlayer.player.start(audios1);
-                }
+//                if (musicOn) {
+//                    musicOn = false;
+//                    AudioPlayer.player.stop(audios);
+//                    AudioPlayer.player.stop(audios1);
+//                } else {
+//                    musicOn = true;
+//                    AudioPlayer.player.start(audios);
+//                    AudioPlayer.player.start(audios1);
+//                }
             }
 //            else {
 //                    musicOn = true;
@@ -572,6 +589,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 frame.setSize(700, 700);
                 centerWindow(frame);
                 glc.repaint();
+            }
+            if ((mx > 19 && mx < 88) && (my > (624) && my < (692))) {
+                System.out.println("puase");
+                puase = true ;
             }
         }
 
