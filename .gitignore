@@ -1,6 +1,6 @@
 # Folders
 .idea/
-build/
+build/classes/
 nbproject/
 out/
 
