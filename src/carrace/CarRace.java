@@ -55,24 +55,20 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int LeftRightorangeCarY = 0;
     int RightLeftpurpleCarY = 0;
     int RightRightorangeCarY = 0;
-    int Rightoil = 0;
-    int Leftoil = 0;
-    int RightBarrel = 0;
-    int LeftBarrel = 0;
-
     float carSpeed = 2.0f;
-    float oilSpeed = 2.0f;
-    float BarrelSpeed = 2.0f;
     int [] randomX = {294, 190, 407, 520 };
-
-    // Add these variables to your class
     int redCarX = 340;
     int redCarY = 83;
     float redCarSpeed = 5.0f;
-
     int roadleftLine = 143;
     int roadrightLine = 543;
     int backgroundY = 0;
+     long startTime;
+     TextRenderer timerRenderer;
+    int score = 0;
+    int collisionCount = 0;
+    int HP_Bonus = 5;
+
 
     ///multi position
     int x_Car_multi_one = 370, y_Car_multi_one = -50, x_Car_multi_two = 753, y_Car_multi_two = -50;
@@ -96,7 +92,11 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         "Barrel_01.png", //12
          "HP_Bonus.png", //13
          "Oil.png",       //14
-          "background.png" //15
+          "background.png", //15
+            "1.png",
+            "2.png",
+            "3.png",
+            "4.png"
     };
     
 
@@ -104,7 +104,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     TextureReader.Texture texture;
     int textureIndex[] = new int[textureName.length];
-    int score;
 
     ///music
     private Clip backgroundMusic;
@@ -198,20 +197,20 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     }
 
     public void drawCar(GL gl, int index, int xPos, int yPos, int width, int height) {
-        gl.glEnable(GL.GL_BLEND);   // Turn Blending On
+        gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
 
         gl.glPushMatrix();
 
-        // Set the position of the car
+
         gl.glTranslatef(xPos, yPos, 0);
 
-        // Adjust the scaling factor based on direction (positive or negative)
+
         gl.glScalef(0.7f, 0.7f, 1.0f);
 
         gl.glBegin(GL.GL_QUADS);
 
-        // Front Face
+
         gl.glTexCoord2f(0.0f, 0.0f);
         gl.glVertex3f(-width / 2, -height / 2, -1.0f);
 
@@ -229,7 +228,77 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         gl.glDisable(GL.GL_BLEND);
     }
+    public void drawHPBonus(GL gl, int x, int y, int width, int height, int numberOfBonuses) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[13]); // Use the index for HP_Bonus texture
 
+        gl.glPushMatrix();
+        float scaleFactor = 0.3f;
+        gl.glScalef(scaleFactor, scaleFactor, 1.0f);
+        int verticalSpacing = 100;
+        for (int i = 0; i < numberOfBonuses; i++) {
+            gl.glBegin(GL.GL_QUADS);
+            gl.glTexCoord2f(0.0f, 0.0f);
+            gl.glVertex3f(x, y + i * (height + verticalSpacing), -1.0f);
+
+            gl.glTexCoord2f(1.0f, 0.0f);
+            gl.glVertex3f(x + width, y + i * (height + verticalSpacing), -1.0f);
+
+            gl.glTexCoord2f(1.0f, 1.0f);
+            gl.glVertex3f(x + width, y + height + i * (height + verticalSpacing), -1.0f);
+
+            gl.glTexCoord2f(0.0f, 1.0f);
+            gl.glVertex3f(x, y + height + i * (height + verticalSpacing), -1.0f);
+
+            gl.glEnd();
+        }
+
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
+    private void drawElapsedTime(GL gl, long elapsedTime) {
+        int xPos = 10;
+        int yPos = 20;
+
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        gl.glTranslatef(xPos, yPos, 0);
+
+        timerRenderer.beginRendering(glc.getWidth(), glc.getHeight());
+        timerRenderer.draw("Time: " + formatTime(elapsedTime), 0, 0);
+        timerRenderer.endRendering();
+
+        gl.glPopMatrix();
+    }
+    private String formatTime(long millis) {
+        long seconds = (millis / 1000) % 60;
+        long minutes = (millis / (1000 * 60)) % 60;
+        long hours = (millis / (1000 * 60 * 60)) % 24;
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    private void drawScore(GL gl, int score) {
+        int xPos = 10;
+        int yPos = y + 500;
+
+        gl.glColor3f(0.0f, 0.0f, 1.0f);
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glPushMatrix();
+        gl.glLoadIdentity();
+        gl.glTranslatef(xPos, yPos,0);
+
+        TextRenderer scoreRenderer = new TextRenderer(new Font("Arial", Font.PLAIN, 20));
+        scoreRenderer.beginRendering(glc.getWidth(), glc.getHeight());
+        scoreRenderer.draw("Score: " + score, 290, 630);
+        scoreRenderer.endRendering();
+
+        gl.glPopMatrix();
+    }
     public void TheCarMultiOne(GL gl, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
@@ -259,6 +328,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     @Override
     public void init(GLAutoDrawable gld) {
+        startTime = System.currentTimeMillis();
+        timerRenderer = new TextRenderer(new Font("Arial", Font.PLAIN, 20));
 //        GL gl = gld.getGL();
 //        gl.glViewport(0, 0, x, y);
 //        gl.glMatrixMode(GL.GL_PROJECTION);
@@ -407,18 +478,24 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 
             }
             if (hardlevel) {
+
+                score++;
+                if (puase) {
+                    drawReturnPlay(gl);
+                }
+                if (startTime == 0) {
+                    startTime = System.currentTimeMillis();
+                }
                 moveBackground();
                 drawHardBackground(gl);
-
-                // Update y-positions of the cars to make them move
+                drawPauseHard(gl);
+                drawReturnHard(gl);
+                long currentTime = System.currentTimeMillis();
+                long elapsedTime = currentTime - startTime;
                 LeftRightorangeCarY -= carSpeed + 14;
                 LeftLeftpurpleCarY -= carSpeed + 14;
                 RightLeftpurpleCarY -= carSpeed + 14;
                 RightRightorangeCarY -= carSpeed + 14;
-                Rightoil -= oilSpeed + 10;
-                Leftoil -= BarrelSpeed + 10;
-                RightBarrel -= oilSpeed + 10;
-                LeftBarrel -= BarrelSpeed + 10;
 
                 if (LeftRightorangeCarY < -500) {
                     LeftRightorangeCarY = y;
@@ -433,37 +510,25 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     RightRightorangeCarY = y;
 
                 }
+                for (int i = 1; i <= 5; i++) {
+                    drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
 
-                if (Rightoil < -3000) {
-                    Rightoil = y;
-
-                }if (Leftoil < -5000) {
-                    Leftoil = y;
-                }if (RightBarrel < -6000) {
-                    RightBarrel = y;
-
-                }if (LeftBarrel < -2000) {
-                    LeftBarrel = y;
                 }
-
                 drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
                 drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
                 drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
                 drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
 
-                drawCar(gl, 14, randomX[0], Rightoil, 100, 110);
-                drawCar(gl, 12, randomX[1], LeftBarrel, 100, 110);
-                drawCar(gl, 12, randomX[2], RightBarrel, 100, 110);
-                drawCar(gl, 14, randomX[3], Leftoil, 100, 110);
                 // Draw the Red car
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
+                drawElapsedTime(gl, elapsedTime);
+                drawScore(gl, score);
             }
         } catch (Exception ex) {
 
         }
 
     }
-
     private void moveBackground() {
         int backgroundSpeed = 10;
 
@@ -522,7 +587,96 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glPopMatrix();
 
         gl.glDisable(GL.GL_BLEND);
+
+    } private void drawPauseHard(GL gl) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[9]);
+
+        gl.glPushMatrix();
+
+        gl.glTranslatef(30, 600, 0.0f);
+        float scaleFactor = 0.5f;
+        gl.glScalef(scaleFactor, scaleFactor, 1.0f);
+
+        gl.glBegin(GL.GL_QUADS);
+
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(0, 0, -1.0f); // Top-left corner
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(100, 0, -1.0f); // Top-right corner
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(100, 100, -1.0f); // Bottom-right corner
+
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(0, 100, -1.0f); // Bottom-left corner
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
     }
+    private void drawReturnHard(GL gl) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[10]);
+
+        gl.glPushMatrix();
+
+        gl.glTranslatef(625, 600, 0.0f);
+        float scaleFactor = 0.5f;
+        gl.glScalef(scaleFactor, scaleFactor, 1.0f);
+
+        gl.glBegin(GL.GL_QUADS);
+
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(0, 0, -1.0f); // Top-left corner
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(100, 0, -1.0f); // Top-right corner
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(100, 100, -1.0f); // Bottom-right corner
+
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(0, 100, -1.0f); // Bottom-left corner
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+    private void drawReturnPlay(GL gl) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[11]);
+
+        gl.glPushMatrix();
+
+        gl.glTranslatef(500, 500, 0.0f);
+        float scaleFactor = 0.5f;
+        gl.glScalef(scaleFactor, scaleFactor, 1.0f);
+
+        gl.glBegin(GL.GL_QUADS);
+
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(0, 0, -1.0f); // Top-left corner
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(100, 0, -1.0f); // Top-right corner
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(100, 100, -1.0f); // Bottom-right corner
+
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(0, 100, -1.0f); // Bottom-left corner
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
+
 
     public void printHighScoreName() {
         GL gl = glc.getGL();
@@ -672,6 +826,22 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 home = true;
                 HIGHSCORE = false;
             }
+        }
+        if (hardlevel) {
+            if ((mx > 613 && mx < 656) && (my > (616) && my < (651))) {
+                if (!puase) {
+                    System.out.println("return");
+                    home = true;
+                    hardlevel = false;
+                } else {
+                    puase = false;
+                }
+            }
+            if ((mx > 30 && mx < 75) && (my > (610) && my < (647))) {
+                System.out.println("puase");
+                puase = true;
+            }
+
         }
         if (MultiPlayer) {
             if ((mx > 1105 && mx < 1174) && (my > (624) && my < (692))) {
