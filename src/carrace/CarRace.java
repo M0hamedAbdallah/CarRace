@@ -64,7 +64,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
 
     // Add these variables to your class
-    int[] randomX = {294, 190, 407, 520};   
+    int[] randomX = {294, 190, 407, 520};
     int[] randomX2 = {313, 493, 683, 873};
     int[] carAccident = {7 ,7, 21 ,22, 23};
     int innx=0;
@@ -717,8 +717,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     gl.glTranslated(x - 80, y - 80, 0);
                     squreSettings(gl, 11);
                     gl.glPopMatrix();
-                    lastFrameTime = 0; 
-                } 
+                    lastFrameTime = 0;
+                }
                 else {
                     isPaused = false;
                 }
@@ -771,7 +771,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     RightRightorangeCarY = y;
 
                 }
-                
+
                 for (int i = 1; i <= life; i++) {
                     drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
 
@@ -783,10 +783,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 // Draw the Red car
                 drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
-                
-                
-                
-                                 
+
+
+
+
                 if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53 ) {
                     if( Math.abs(LeftRightorangeCarY -redCarY ) <= 100){
                         carCrash();
@@ -1212,7 +1212,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     @Override
     public void keyTyped(final KeyEvent event) {
-        // don't care 
+        // don't care
     }
 
     public String getName() {
