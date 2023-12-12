@@ -52,13 +52,18 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     boolean singlePlayer = false;
     boolean mediumLevel = false;
     boolean easyLevel = false;
+    boolean isPaused = false;
+
     int orangeCarY = 0;
     int LeftLeftpurpleCarY = 0;
     int LeftRightorangeCarY = 0;
     int RightLeftpurpleCarY = 0;
     int RightRightorangeCarY = 0;
     float carSpeed = 2.0f;
-    int[] randomX = {294, 190, 407, 520};
+
+
+    // Add these variables to your class
+    int[] randomX = {294, 190, 407, 520};   
     int redCarX = 340;
     int redCarY = 83;
     float redCarSpeed = 5.0f;
@@ -72,9 +77,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int score = 0;
     int collisionCount = 0;
     int HP_Bonus = 5;
-
+    long totalElapsedTime = 0;
+    long lastFrameTime = 0;
     ///multi position
     int x_Car_multi_one = 370, y_Car_multi_one = -50, x_Car_multi_two = 753, y_Car_multi_two = -50;
+    int Live_multi_one[] = {18, 18, 18, 18, 18}, Live_multi_two[] = {18, 18, 18, 18, 18};
+    ;
     boolean puase = false;
 
     //Assets/thephoto.png
@@ -95,13 +103,15 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         "Barrel_01.png", //12
         "HP_Bonus.png", //13
         "Oil.png", //14
-        "background.png", //15
-        "1.png", //16
-        "2.png", //17
-        "3.png", //18
-        "4.png", //19
-        "CarTwo.png", //20
-        "OnePlayer.png"//21
+        "background.png",//15
+        "CarTwo.png",//16
+        "HP_Bar.png",//17
+        "HP_Dot.png",//18
+        "HP_Dot_BG.png",//19
+        "1.png", //20
+        "2.png", //21
+        "3.png", //22
+        "4.png", //23
     };
 
     int highScore = 0;
@@ -200,6 +210,60 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glDisable(GL.GL_BLEND);
     }
 
+    public void squrePar(GL gl, int index) {
+        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
+
+        gl.glPushMatrix();
+
+        gl.glBegin(GL.GL_QUADS);
+
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(0f, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(300, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(300, 70, -1.0f);
+
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(0f, 70, -1.0f);
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
+    public void squreLive(GL gl, int index) {
+        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
+
+        gl.glPushMatrix();
+
+        gl.glBegin(GL.GL_QUADS);
+
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(0f, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(70, 0f, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(70, 50, -1.0f);
+
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(0f, 50, -1.0f);
+
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
     public void drawCar(GL gl, int index, int xPos, int yPos, int width, int height) {
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
@@ -260,7 +324,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glDisable(GL.GL_BLEND);
     }
 
-    private void drawElapsedTime(GL gl, long elapsedTime) {
+    private void drawElapsedTime(GL gl, long elapsedTime , int posx , int posy) {
         int xPos = 10;
         int yPos = 20;
 
@@ -271,7 +335,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glTranslatef(xPos, yPos, 0);
 
         timerRenderer.beginRendering(glc.getWidth(), glc.getHeight());
-        timerRenderer.draw("Time: " + formatTime(elapsedTime), 0, 0);
+        timerRenderer.draw("Time: " + formatTime(elapsedTime), posx, posy);
         timerRenderer.endRendering();
 
         gl.glPopMatrix();
@@ -452,6 +516,16 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                     moveBackground();
                     drawBackground(gl);
+                    long currentTime = System.currentTimeMillis();
+                    long elapsedTime = 0;
+                    if (!isPaused) {
+                        if (lastFrameTime != 0) {
+                            elapsedTime = currentTime - lastFrameTime;
+                            totalElapsedTime += elapsedTime;
+                        }
+                        lastFrameTime = currentTime;
+                    }
+                    
                     gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
                     TheCarMultiOne(gl, 8);
@@ -459,7 +533,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                     gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_two, y_Car_multi_two, 0);
-                    TheCarMultiOne(gl, 20);
+                    TheCarMultiOne(gl, 16);
                     gl.glPopMatrix();
 
                     gl.glPushMatrix();
@@ -471,12 +545,81 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     gl.glTranslated(x - 80, y - 80, 0);
                     squreSettings(gl, 10);
                     gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(70, 0, 0);
+                    gl.glRotated(90, 0, 0, 1);
+                    squrePar(gl, 17);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(1200, 0, 0);
+                    gl.glRotated(90, 0, 0, 1);
+                    squrePar(gl, 17);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(1130, 0, 0);
+                    squreLive(gl, Live_multi_two[0]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(1130, 60, 0);
+                    squreLive(gl, Live_multi_two[1]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(1130, 120, 0);
+                    squreLive(gl, Live_multi_two[2]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(1130, 170, 0);
+                    squreLive(gl, Live_multi_two[3]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(1130, 220, 0);
+                    squreLive(gl, Live_multi_two[4]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(0, 0, 0);
+                    squreLive(gl, Live_multi_one[0]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(0, 60, 0);
+                    squreLive(gl, Live_multi_one[1]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(0, 120, 0);
+                    squreLive(gl, Live_multi_one[2]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(0, 170, 0);
+                    squreLive(gl, Live_multi_one[3]);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(0, 220, 0);
+                    squreLive(gl, Live_multi_one[4]);
+                    gl.glPopMatrix();
+                    drawElapsedTime(gl, totalElapsedTime,520,600);
+
                 }
                 if (puase) {
+                    isPaused = true;
                     gl.glPushMatrix();
                     gl.glTranslated(x - 80, y - 80, 0);
                     squreSettings(gl, 11);
                     gl.glPopMatrix();
+                    lastFrameTime = 0; 
+                } 
+                else {
+                    isPaused = false;
                 }
 
             }
@@ -526,7 +669,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 // Draw the Red car
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
-                drawElapsedTime(gl, elapsedTime);
+                drawElapsedTime(gl, elapsedTime,5,5);
                 drawScore(gl, score);
             }
 
@@ -891,6 +1034,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("MultiPlayer");
                 home = false;
                 MultiPlayer = true;
+                startTime=0;
+                startTime = System.currentTimeMillis();
                 x = 1200;
                 y = 700;
                 frame.setSize(1200, 700);
@@ -904,6 +1049,9 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 home = false;
 //                hardlevel = true;
                 singlePlayer = true;
+                hardlevel = true;
+                startTime=0;
+                startTime = System.currentTimeMillis();
             } else if ((mx > 534 && mx < 589) && (my > (621) && my < (669))) {
                 System.out.println("sound");
                 if (musicOn) {
@@ -1038,10 +1186,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if (isKeyPressed(KeyEvent.VK_A) && x_Car_multi_one > 190 && !puase) {
                 x_Car_multi_one -= 5;
             }
-            if (isKeyPressed(KeyEvent.VK_RIGHT) && x_Car_multi_two < 944) {
+            if (isKeyPressed(KeyEvent.VK_RIGHT) && x_Car_multi_two < 944 && !puase) {
                 x_Car_multi_two += 5;
             }
-            if (isKeyPressed(KeyEvent.VK_LEFT) && x_Car_multi_two > x / 2) {
+            if (isKeyPressed(KeyEvent.VK_LEFT) && x_Car_multi_two > x / 2 && !puase) {
                 x_Car_multi_two -= 5;
             }
         }
