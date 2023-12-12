@@ -458,7 +458,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         }
 //        AudioPlayer.player.start(audios);
 //        AudioPlayer.player.start(audios1);
-//        playMusic();
+          playMusic();
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -660,7 +660,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 score++;
                 if (puase) {
+                    isPaused = true;
                     drawReturnPlay(gl);
+                    lastFrameTime = 0;
+                }
+                else {
+                    isPaused = false;
                 }
                 if (startTime == 0) {
                     startTime = System.currentTimeMillis();
@@ -1206,7 +1211,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             }
         }
         if (hardlevel) {
-            if ((mx > 613 && mx < 656) && (my > (616) && my < (651))) {
+            if ((mx > 33 && mx < 74) && (my > (613) && my < (649))) {
                 if (!puase) {
                     System.out.println("return");
                     singlePlayer = true;
