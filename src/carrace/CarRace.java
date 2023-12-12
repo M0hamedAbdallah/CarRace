@@ -65,8 +65,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     // Add these variables to your class
     int[] randomX = {294, 190, 407, 520};   
-    int[] carAccident = {7, 20, 21 ,22, 23};   
-    int inx=0;
+    int[] carAccident = {7 ,7, 21 ,22, 23};   
+    int innx=0;
     int life = 4;
     int cnt = 0;
     long lastCollisionTime = System.currentTimeMillis();
@@ -96,31 +96,31 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png", //0
-        "howtoplay.png", //1
-        "HIGH-SCORE.png", //2
-        "background.png", //3
-        "Orange Car.png", //4
-        "Purple Car.png", //5
-        "yellow car.png", //6
-        "Red Car.png", //7
-        "CarOne.png", //8 
-        "Pause_BTN.png", //9
-        "Close_BTN.png", //10
-        "Play_BTN.png", //11
-        "Barrel_01.png", //12
-        "HP_Bonus.png", //13
-        "Oil.png", //14
-        "background.png",//15
-        "CarTwo.png",//16
-        "HP_Bar.png",//17
-        "HP_Dot.png",//18
-        "HP_Dot_BG.png",//19
-        "1.png", //20
-        "2.png", //21
-        "3.png", //22
-        "4.png", //23
-        "OnePlayer.png"//24
+        "Window.png",       //0
+        "howtoplay.png",    //1
+        "HIGH-SCORE.png",   //2
+        "background.png",   //3
+        "Orange Car.png",   //4
+        "Purple Car.png",   //5
+        "yellow car.png",   //6
+        "CarOne.png",      //7
+        "CarOne.png",       //8
+        "Pause_BTN.png",    //9
+        "Close_BTN.png",    //10
+        "Play_BTN.png",     //11
+        "Barrel_01.png",    //12
+        "HP_Bonus.png",     //13
+        "Oil.png",          //14
+        "background.png",   //15
+        "CarTwo.png",       //16
+        "HP_Bar.png",       //17
+        "HP_Dot.png",       //18
+        "HP_Dot_BG.png",    //19
+        "1.png",            //20
+        "2.png",            //21
+        "3.png",            //22
+        "4.png",            //23
+        "OnePlayer.png"     //24
     };
 
     int highScore = 0;
@@ -168,21 +168,24 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             e.printStackTrace();
         }
     }
-    private void carAccidentCrash() {
+    private void carCrash() {
         long currentTime = System.currentTimeMillis();
         long timeDifference = currentTime - lastCollisionTime;
-        if (timeDifference >= 1500) {
+        if (timeDifference >= 1000) {
             lastCollisionTime = currentTime;
-            if (inx < 4) {
-                inx++;
+            if (innx < 4) {
+                innx++;
             }
             else{
-                if(life<=0){
-                    JOptionPane.showMessageDialog(frame, "You Lose!!");
-                    System.exit(0);
-                }
+                JOptionPane.showMessageDialog(frame, "You Lose!!");
+                System.exit(0);
             }
             life--;
+            if(life==-1){
+                JOptionPane.showMessageDialog(frame, "You Lose!!");
+                System.exit(0);
+
+            }
         }
     } 
 
@@ -700,30 +703,30 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
 
                 // Draw the Red car
-                drawCar(gl, carAccident[inx], redCarX, redCarY, 70, 110);
+                drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
                 
                 
                 
                                  
                 if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53 ) {
-                    if( Math.abs(LeftRightorangeCarY -redCarY ) <= 140){
-                        carAccidentCrash();
+                    if( Math.abs(LeftRightorangeCarY -redCarY ) <= 100){
+                        carCrash();
                     }
                 }
                 
                 if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53 ) {
-                    if( Math.abs(LeftLeftpurpleCarY -redCarY ) <= 140){
-                        carAccidentCrash();
+                    if( Math.abs(LeftLeftpurpleCarY -redCarY ) <= 100){
+                        carCrash();
                     }
                 }
                 if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53 ) {
-                    if( Math.abs(RightRightorangeCarY -redCarY ) <= 140){
-                        carAccidentCrash();
+                    if( Math.abs(RightRightorangeCarY -redCarY ) <= 100){
+                        carCrash();
                     }
                 }
                 if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53 ) {
-                    if( Math.abs(RightLeftpurpleCarY-redCarY ) <= 140){
-                        carAccidentCrash();
+                    if( Math.abs(RightLeftpurpleCarY-redCarY ) <= 100){
+                        carCrash();
                     }
                 }
 
