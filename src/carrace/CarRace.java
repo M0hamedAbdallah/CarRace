@@ -228,7 +228,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         long timeDifference = currentTime - lastCollisionTime;
         if (timeDifference >= 1000) {
             lastCollisionTime = currentTime;
-            if (innx < 6) {
+            if (innx < 4) {
                 innx++;
             } else {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
@@ -242,29 +242,34 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             }
         }
     }
-private void carCrash4() {
+    private void carCrash4() {
         long currentTime = System.currentTimeMillis();
         long timeDifference = currentTime - lastCollisionTime;
         if (timeDifference >= 1000) {
             lastCollisionTime = currentTime;
-            if (innx < 6) {
+            if (innx < 4) {
                 innx++;
             } else {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
+                startNewGame();
             }
             life4--;
             life5--;
-            if (life3 == -1) {
+            if (life5 == -1 || life4 == -1) {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
-
-            }if (life4 == -1) {
-                JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
-
+                startNewGame();
             }
         }
+    }
+
+    private void startNewGame() {
+        innx = 0;
+        life4 = 6;
+        life5 = 6;
+        life = 4;
+        life2 = 5;
+        life3 = 6;
+        JOptionPane.showMessageDialog(frame, "Starting a new game!");
     }
 
     public void squreOfHome(GL gl, int index) {
@@ -961,8 +966,7 @@ private void carCrash4() {
                 drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
 
                 // Draw the Red car
-                drawCar(gl, 7, redCarX, redCarY, 70, 110);
-                drawElapsedTime(gl, elapsedTime, 5, 5);
+                drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);                drawElapsedTime(gl, elapsedTime, 5, 5);
                 drawScore(gl, score);
             }
 
@@ -1023,8 +1027,7 @@ private void carCrash4() {
                 drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
 
                 // Draw the Red car
-                drawCar(gl, 7, redCarX, redCarY, 70, 110);
-                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
                     if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
                         carCrash3();
                     }
