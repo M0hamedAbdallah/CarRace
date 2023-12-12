@@ -269,6 +269,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         life = 4;
         life2 = 5;
         life3 = 6;
+        singlePlayer = true;
         JOptionPane.showMessageDialog(frame, "Starting a new game!");
     }
 
