@@ -192,12 +192,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 innx++;
             } else {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
+                startNewGame();
             }
             life--;
             if (life == -1) {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
+                startNewGame();
 
             }
         }
@@ -208,16 +208,16 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         long timeDifference = currentTime - lastCollisionTime;
         if (timeDifference >= 1000) {
             lastCollisionTime = currentTime;
-            if (innx < 5) {
+            if (innx < 4) {
                 innx++;
             } else {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
+                startNewGame();
             }
             life2--;
             if (life2 == -1) {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
+                startNewGame();
 
             }
         }
@@ -232,12 +232,12 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 innx++;
             } else {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
+                startNewGame();
             }
             life3--;
             if (life3 == -1) {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
-                System.exit(0);
+                startNewGame();
 
             }
         }
@@ -1027,7 +1027,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
 
                 // Draw the Red car
-                drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
+                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
                     if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
                         carCrash3();
                     }
