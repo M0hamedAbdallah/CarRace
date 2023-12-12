@@ -27,6 +27,7 @@ import java.io.FileWriter;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -64,6 +65,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     // Add these variables to your class
     int[] randomX = {294, 190, 407, 520};   
+    int[] carAccident = {7, 20, 21 ,22, 23};   
+    int inx=0;
+    int life = 4;
+    int cnt = 0;
+    long lastCollisionTime = System.currentTimeMillis();
+
+
     int redCarX = 340;
     int redCarY = 83;
     float redCarSpeed = 5.0f;
@@ -130,6 +138,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         Random rand = new Random();
         return rand.nextInt(i + 1);
     }
+    private int rand(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
+    }
 
     public CarRace(String name, int width, int hight, JFrame frame) {
         this.name = name;
@@ -156,6 +168,23 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             e.printStackTrace();
         }
     }
+    private void carAccidentCrash() {
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - lastCollisionTime;
+        if (timeDifference >= 1500) {
+            lastCollisionTime = currentTime;
+            if (inx < 4) {
+                inx++;
+            }
+            else{
+                if(life<=0){
+                    JOptionPane.showMessageDialog(frame, "You Lose!!");
+                    System.exit(0);
+                }
+            }
+            life--;
+        }
+    } 
 
     public void squreOfHome(GL gl, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
@@ -273,7 +302,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
         gl.glTranslatef(xPos, yPos, 0);
 
-        gl.glScalef(0.7f, 0.7f, 1.0f);
+//        gl.glScalef(0.7f, 0.7f, 1.0f);
+        gl.glScalef(1.0f, 1.0f, 1.0f);
 
         gl.glBegin(GL.GL_QUADS);
 
@@ -426,7 +456,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         }
 //        AudioPlayer.player.start(audios);
 //        AudioPlayer.player.start(audios1);
-        playMusic();
+//        playMusic();
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -639,10 +669,10 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 drawReturnHard(gl);
                 long currentTime = System.currentTimeMillis();
                 long elapsedTime = currentTime - startTime;
-                LeftRightorangeCarY -= carSpeed + 14;
-                LeftLeftpurpleCarY -= carSpeed + 14;
-                RightLeftpurpleCarY -= carSpeed + 14;
-                RightRightorangeCarY -= carSpeed + 14;
+                LeftRightorangeCarY -= carSpeed + rand(10, 15);
+                LeftLeftpurpleCarY -= carSpeed + rand(10, 17);
+                RightLeftpurpleCarY -= carSpeed + rand(10, 17);
+                RightRightorangeCarY -= carSpeed + rand(10, 15);
 
                 if (LeftRightorangeCarY < -500) {
                     LeftRightorangeCarY = y;
@@ -659,7 +689,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     RightRightorangeCarY = y;
 
                 }
-                for (int i = 1; i <= 5; i++) {
+                
+                for (int i = 1; i <= life; i++) {
                     drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
 
                 }
@@ -669,9 +700,41 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
 
                 // Draw the Red car
-                drawCar(gl, 7, redCarX, redCarY, 70, 110);
+                drawCar(gl, carAccident[inx], redCarX, redCarY, 70, 110);
+                
+                
+                
+                                 
+                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53 ) {
+                    if( Math.abs(LeftRightorangeCarY -redCarY ) <= 140){
+                        carAccidentCrash();
+                    }
+                }
+                
+                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53 ) {
+                    if( Math.abs(LeftLeftpurpleCarY -redCarY ) <= 140){
+                        carAccidentCrash();
+                    }
+                }
+                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53 ) {
+                    if( Math.abs(RightRightorangeCarY -redCarY ) <= 140){
+                        carAccidentCrash();
+                    }
+                }
+                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53 ) {
+                    if( Math.abs(RightLeftpurpleCarY-redCarY ) <= 140){
+                        carAccidentCrash();
+                    }
+                }
+
+                
+                
                 drawElapsedTime(gl, elapsedTime,5,5);
                 drawScore(gl, score);
+                
+                
+                
+                
             }
 
             if (mediumLevel) {
