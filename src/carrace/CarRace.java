@@ -109,31 +109,31 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-            "Window.png", //0
-            "howtoplay.png", //1
-            "HIGH-SCORE.png", //2
-            "background.png", //3
-            "Orange Car.png", //4
-            "Purple Car.png", //5
-            "yellow car.png", //6
-            "CarOne.png", //7
-            "CarOne.png", //8
-            "Pause_BTN.png", //9
-            "Close_BTN.png", //10
-            "Play_BTN.png", //11
-            "Barrel_01.png", //12
-            "HP_Bonus.png", //13
-            "Oil.png", //14
-            "background.png", //15
-            "CarTwo.png", //16
-            "HP_Bar.png", //17
-            "HP_Dot.png", //18
-            "HP_Dot_BG.png", //19
-            "1.png", //20
-            "2.png", //21
-            "3.png", //22
-            "4.png", //23
-            "OnePlayer.png" //24
+        "Window.png", //0
+        "howtoplay.png", //1
+        "HIGH-SCORE.png", //2
+        "background.png", //3
+        "Orange Car.png", //4
+        "Purple Car.png", //5
+        "yellow car.png", //6
+        "CarOne.png", //7
+        "CarOne.png", //8
+        "Pause_BTN.png", //9
+        "Close_BTN.png", //10
+        "Play_BTN.png", //11
+        "Barrel_01.png", //12
+        "HP_Bonus.png", //13
+        "Oil.png", //14
+        "background.png", //15
+        "CarTwo.png", //16
+        "HP_Bar.png", //17
+        "HP_Dot.png", //18
+        "HP_Dot_BG.png", //19
+        "1.png", //20
+        "2.png", //21
+        "3.png", //22
+        "4.png", //23
+        "OnePlayer.png" //24
     };
 
     int highScore = 0;
@@ -242,6 +242,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             }
         }
     }
+
     private void carCrash4() {
         long currentTime = System.currentTimeMillis();
         long timeDifference = currentTime - lastCollisionTime;
@@ -690,8 +691,6 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                         }
                     }
 
-
-
                     gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
                     TheCarMultiOne(gl, 8);
@@ -800,257 +799,284 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
             }
             if (hardlevel) {
+
                 long currentTime = System.currentTimeMillis();
                 long elapsedTime = 0;
-
-                score++;
-                if (!isPaused) {
-                    if (lastFrameTime != 0) {
-                        elapsedTime = currentTime - lastFrameTime;
-                        totalElapsedTime += elapsedTime;
+                if (!puase) {
+                    score++;
+                    if (!isPaused) {
+                        if (lastFrameTime != 0) {
+                            elapsedTime = currentTime - lastFrameTime;
+                            totalElapsedTime += elapsedTime;
+                        }
+                        lastFrameTime = currentTime;
                     }
-                    lastFrameTime = currentTime;
+                    if (puase) {
+                        isPaused = true;
+                        drawReturnPlay(gl);
+                        lastFrameTime = 0;
+                    } else {
+                        isPaused = false;
+                    }
+                    if (startTime == 0) {
+                        startTime = System.currentTimeMillis();
+                    }
+                    moveBackground();
+                    drawHardBackground(gl);
+                    drawPauseHard(gl);
+                    drawReturnHard(gl);
+                    LeftRightorangeCarY -= carSpeed + rand(10, 15);
+                    LeftLeftpurpleCarY -= carSpeed + rand(10, 17);
+                    RightLeftpurpleCarY -= carSpeed + rand(10, 17);
+                    RightRightorangeCarY -= carSpeed + rand(10, 15);
+
+                    if (LeftRightorangeCarY < -500) {
+                        LeftRightorangeCarY = y;
+                    }
+                    if (LeftLeftpurpleCarY < -300) {
+                        LeftLeftpurpleCarY = y;
+
+                    }
+                    if (RightLeftpurpleCarY < -1000) {
+                        RightLeftpurpleCarY = y;
+
+                    }
+                    if (RightRightorangeCarY < -200) {
+                        RightRightorangeCarY = y;
+
+                    }
+
+                    for (int i = 1; i <= life; i++) {
+                        drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
+
+                    }
+                    drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
+                    drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
+                    drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
+                    drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
+
+                    // Draw the Red car
+                    drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
+
+                    if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                        if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
+                            carCrash();
+                        }
+                    }
+
+                    if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
+                        if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
+                            carCrash();
+                        }
+                    }
+                    if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
+                        if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
+                            carCrash();
+                        }
+                    }
+                    if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
+                        if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
+                            carCrash();
+                        }
+                    }
+                    drawElapsedTime(gl, elapsedTime, 5, 5);
+                    drawScore(gl, score);
                 }
                 if (puase) {
                     isPaused = true;
-                    drawReturnPlay(gl);
+                    gl.glPushMatrix();
+                    gl.glTranslated(x - 80, y - 80, 0);
+                    squreSettings(gl, 11);
+                    gl.glPopMatrix();
                     lastFrameTime = 0;
-                } else {
-                    isPaused = false;
                 }
-                if (startTime == 0) {
-                    startTime = System.currentTimeMillis();
-                }
-                moveBackground();
-                drawHardBackground(gl);
-                drawPauseHard(gl);
-                drawReturnHard(gl);
-                LeftRightorangeCarY -= carSpeed + rand(10, 15);
-                LeftLeftpurpleCarY -= carSpeed + rand(10, 17);
-                RightLeftpurpleCarY -= carSpeed + rand(10, 17);
-                RightRightorangeCarY -= carSpeed + rand(10, 15);
-
-                if (LeftRightorangeCarY < -500) {
-                    LeftRightorangeCarY = y;
-                }
-                if (LeftLeftpurpleCarY < -300) {
-                    LeftLeftpurpleCarY = y;
-
-                }
-                if (RightLeftpurpleCarY < -1000) {
-                    RightLeftpurpleCarY = y;
-
-                }
-                if (RightRightorangeCarY < -200) {
-                    RightRightorangeCarY = y;
-
-                }
-
-                for (int i = 1; i <= life; i++) {
-                    drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
-
-                }
-                drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
-                drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
-                drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
-                drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
-
-                // Draw the Red car
-                drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
-
-
-
-                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
-                    if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
-                        carCrash();
-                    }
-                }
-
-                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
-                    if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
-                        carCrash();
-                    }
-                }
-                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
-                    if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
-                        carCrash();
-                    }
-                }
-                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
-                    if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
-                        carCrash();
-                    }
-                }
-                drawElapsedTime(gl, elapsedTime, 5, 5);
-                drawScore(gl, score);
 
             }
 
             if (mediumLevel) {
+                if (!puase) {
+                    long currentTime = System.currentTimeMillis();
+                    long elapsedTime = 0;
 
-                long currentTime = System.currentTimeMillis();
-                long elapsedTime = 0;
-
-                score++;
-                if (!isPaused) {
-                    if (lastFrameTime != 0) {
-                        elapsedTime = currentTime - lastFrameTime;
-                        totalElapsedTime += elapsedTime;
+                    score++;
+                    if (!isPaused) {
+                        if (lastFrameTime != 0) {
+                            elapsedTime = currentTime - lastFrameTime;
+                            totalElapsedTime += elapsedTime;
+                        }
+                        lastFrameTime = currentTime;
                     }
-                    lastFrameTime = currentTime;
+                    if (puase) {
+                        isPaused = true;
+                        drawReturnPlay(gl);
+                        lastFrameTime = 0;
+                    } else {
+                        isPaused = false;
+                    }
+                    if (startTime == 0) {
+                        startTime = System.currentTimeMillis();
+                    }
+                    moveBackground();
+                    drawHardBackground(gl);
+                    drawPauseHard(gl);
+                    drawReturnHard(gl);
+                    LeftRightorangeCarY -= readCarSpeedMediumLevel + 7;
+                    LeftLeftpurpleCarY -= readCarSpeedMediumLevel + 7;
+                    RightLeftpurpleCarY -= readCarSpeedMediumLevel + 7;
+                    RightRightorangeCarY -= readCarSpeedMediumLevel + 7;
+
+                    if (LeftRightorangeCarY < -500) {
+                        LeftRightorangeCarY = y;
+                    }
+                    if (LeftLeftpurpleCarY < -300) {
+                        LeftLeftpurpleCarY = y;
+
+                    }
+                    if (RightLeftpurpleCarY < -1000) {
+                        RightLeftpurpleCarY = y;
+
+                    }
+                    if (RightRightorangeCarY < -200) {
+                        RightRightorangeCarY = y;
+
+                    }
+                    for (int i = 1; i <= life2; i++) {
+                        drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
+
+                    }
+
+                    if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                        if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
+                            carCrash2();
+                        }
+                    }
+
+                    if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
+                        if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
+                            carCrash2();
+                        }
+                    }
+                    if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
+                        if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
+                            carCrash2();
+                        }
+                    }
+                    if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
+                        if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
+                            carCrash2();
+                        }
+                    }
+
+                    drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
+                    drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
+                    drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
+                    drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
+
+                    // Draw the Red car
+                    drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
+                    drawElapsedTime(gl, elapsedTime, 5, 5);
+                    drawScore(gl, score);
                 }
                 if (puase) {
                     isPaused = true;
-                    drawReturnPlay(gl);
+                    gl.glPushMatrix();
+                    gl.glTranslated(x - 80, y - 80, 0);
+                    squreSettings(gl, 11);
+                    gl.glPopMatrix();
                     lastFrameTime = 0;
-                } else {
-                    isPaused = false;
                 }
-                if (startTime == 0) {
-                    startTime = System.currentTimeMillis();
-                }
-                moveBackground();
-                drawHardBackground(gl);
-                drawPauseHard(gl);
-                drawReturnHard(gl);
-                LeftRightorangeCarY -= readCarSpeedMediumLevel + 7;
-                LeftLeftpurpleCarY -= readCarSpeedMediumLevel + 7;
-                RightLeftpurpleCarY -= readCarSpeedMediumLevel + 7;
-                RightRightorangeCarY -= readCarSpeedMediumLevel + 7;
-
-                if (LeftRightorangeCarY < -500) {
-                    LeftRightorangeCarY = y;
-                }
-                if (LeftLeftpurpleCarY < -300) {
-                    LeftLeftpurpleCarY = y;
-
-                }
-                if (RightLeftpurpleCarY < -1000) {
-                    RightLeftpurpleCarY = y;
-
-                }
-                if (RightRightorangeCarY < -200) {
-                    RightRightorangeCarY = y;
-
-                }
-                for (int i = 1; i <= life2; i++) {
-                    drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
-
-                }
-
-                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
-                    if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
-                        carCrash2();
-                    }
-                }
-
-                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
-                    if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
-                        carCrash2();
-                    }
-                }
-                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
-                    if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
-                        carCrash2();
-                    }
-                }
-                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
-                    if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
-                        carCrash2();
-                    }
-                }
-
-                drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
-                drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
-                drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
-                drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
-
-                // Draw the Red car
-                drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);                drawElapsedTime(gl, elapsedTime, 5, 5);
-                drawScore(gl, score);
             }
 
             if (easyLevel) {
+                if (!puase) {
+                    long currentTime = System.currentTimeMillis();
+                    long elapsedTime = 0;
 
-                long currentTime = System.currentTimeMillis();
-                long elapsedTime = 0;
-
-                score++;
-                if (!isPaused) {
-                    if (lastFrameTime != 0) {
-                        elapsedTime = currentTime - lastFrameTime;
-                        totalElapsedTime += elapsedTime;
+                    score++;
+                    if (!isPaused) {
+                        if (lastFrameTime != 0) {
+                            elapsedTime = currentTime - lastFrameTime;
+                            totalElapsedTime += elapsedTime;
+                        }
+                        lastFrameTime = currentTime;
                     }
-                    lastFrameTime = currentTime;
-                }
-                if (puase) {
-                    isPaused = true;
-                    drawReturnPlay(gl);
-                    lastFrameTime = 0;
-                } else {
-                    isPaused = false;
-                }
-                if (startTime == 0) {
-                    startTime = System.currentTimeMillis();
-                }
-                moveBackground();
-                drawHardBackground(gl);
-                drawPauseHard(gl);
-                drawReturnHard(gl);
-                LeftRightorangeCarY -= readCarSpeedEasyLevel + 3;
-                LeftLeftpurpleCarY -= readCarSpeedEasyLevel + 3;
-                RightLeftpurpleCarY -= readCarSpeedEasyLevel + 3;
-                RightRightorangeCarY -= readCarSpeedEasyLevel + 3;
-
-                if (LeftRightorangeCarY < -500) {
-                    LeftRightorangeCarY = y;
-                }
-                if (LeftLeftpurpleCarY < -300) {
-                    LeftLeftpurpleCarY = y;
-
-                }
-                if (RightLeftpurpleCarY < -1000) {
-                    RightLeftpurpleCarY = y;
-
-                }
-                if (RightRightorangeCarY < -200) {
-                    RightRightorangeCarY = y;
-
-                }
-                for (int i = 1; i <= life3; i++) {
-                    drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
-
-                }
-                drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
-                drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
-                drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
-                drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
-
-                // Draw the Red car
-                drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
-                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
-                    if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
-                        carCrash3();
+                    if (puase) {
+                        isPaused = true;
+                        drawReturnPlay(gl);
+                        lastFrameTime = 0;
+                    } else {
+                        isPaused = false;
                     }
-                }
+                    if (startTime == 0) {
+                        startTime = System.currentTimeMillis();
+                    }
+                    moveBackground();
+                    drawHardBackground(gl);
+                    drawPauseHard(gl);
+                    drawReturnHard(gl);
+                    LeftRightorangeCarY -= readCarSpeedEasyLevel + 3;
+                    LeftLeftpurpleCarY -= readCarSpeedEasyLevel + 3;
+                    RightLeftpurpleCarY -= readCarSpeedEasyLevel + 3;
+                    RightRightorangeCarY -= readCarSpeedEasyLevel + 3;
 
-                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
-                    if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
-                        carCrash3();
+                    if (LeftRightorangeCarY < -500) {
+                        LeftRightorangeCarY = y;
                     }
-                }
-                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
-                    if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
-                        carCrash3();
+                    if (LeftLeftpurpleCarY < -300) {
+                        LeftLeftpurpleCarY = y;
+
                     }
-                }
-                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
-                    if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
-                        carCrash3();
+                    if (RightLeftpurpleCarY < -1000) {
+                        RightLeftpurpleCarY = y;
+
                     }
+                    if (RightRightorangeCarY < -200) {
+                        RightRightorangeCarY = y;
+
+                    }
+                    for (int i = 1; i <= life3; i++) {
+                        drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
+
+                    }
+                    drawCar(gl, 4, randomX[0], LeftRightorangeCarY, 70, 110);
+                    drawCar(gl, 5, randomX[2], RightRightorangeCarY, 70, 110);
+                    drawCar(gl, 5, randomX[1], LeftLeftpurpleCarY, 70, 110);
+                    drawCar(gl, 4, randomX[3], RightLeftpurpleCarY, 70, 110);
+
+                    // Draw the Red car
+                    drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
+                    if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                        if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
+                            carCrash3();
+                        }
+                    }
+
+                    if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
+                        if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
+                            carCrash3();
+                        }
+                    }
+                    if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
+                        if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
+                            carCrash3();
+                        }
+                    }
+                    if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
+                        if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
+                            carCrash3();
+                        }
+                    }
+                    drawElapsedTime(gl, elapsedTime, 5, 5);
+                    drawScore(gl, score);
                 }
-                drawElapsedTime(gl, elapsedTime, 5, 5);
-                drawScore(gl, score);
+            }
+            if (puase) {
+                isPaused = true;
+                gl.glPushMatrix();
+                gl.glTranslated(x - 80, y - 80, 0);
+                squreSettings(gl, 11);
+                gl.glPopMatrix();
+                lastFrameTime = 0;
             }
         } catch (Exception ex) {
 
@@ -1397,14 +1423,18 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if ((mx > 33 && mx < 74) && (my > (613) && my < (649))) {
                 if (!puase) {
                     System.out.println("return");
-                    singlePlayer = true;
-                    easyLevel = false;
+                    puase = true;
                 } else {
                     puase = false;
                 }
             } else if ((mx > 615 && mx < 652) && (my > (612) && my < (649))) {
-                home = true;
-                easyLevel = false;
+
+                if (!puase) {
+                    home = true;
+                    easyLevel = false;
+                } else {
+                    puase = false;
+                }
             }
 
         }
@@ -1412,29 +1442,36 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             if ((mx > 33 && mx < 74) && (my > (613) && my < (649))) {
                 if (!puase) {
                     System.out.println("return");
-                    singlePlayer = true;
-                    mediumLevel = false;
+                    puase = true;
                 } else {
                     puase = false;
                 }
             } else if ((mx > 615 && mx < 652) && (my > (612) && my < (649))) {
-                home = true;
-                mediumLevel = false;
+                if (!puase) {
+                    home = true;
+                    mediumLevel = false;
+                } else {
+                    puase = false;
+                }
             }
         }
         if (hardlevel) {
             if ((mx > 33 && mx < 74) && (my > (613) && my < (649))) {
                 if (!puase) {
                     System.out.println("return");
-                    singlePlayer = true;
-                    hardlevel = false;
+                    puase = true;
                 } else {
                     puase = false;
                 }
             } else if ((mx > 615 && mx < 652) && (my > (612) && my < (649))) {
-                home = true;
-                hardlevel = false;
-            }
+
+                if (!puase) {
+                    home = true;
+                    hardlevel = false;
+                } else {
+                    puase = false;
+                }
+            } 
 
         }
         if (MultiPlayer) {
