@@ -62,18 +62,15 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int RightRightorangeCarY = 0;
     float carSpeed = 2.0f;
 
-
     // Add these variables to your class
     int[] randomX = {294, 190, 407, 520};
-    int[] randomX2 = {313, 493, 683, 873};
-    int[] carAccident = {7 ,7, 21 ,22, 23};
-    int innx=0;
+    int[] carAccident = {7, 7, 21, 22, 23};
+    int innx = 0;
     int life = 4;
     int life2 = 5;
-    int life3 = 6 ;
+    int life3 = 6;
     int cnt = 0;
     long lastCollisionTime = System.currentTimeMillis();
-
 
     int redCarX = 340;
     int redCarY = 83;
@@ -94,36 +91,46 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     int x_Car_multi_one = 370, y_Car_multi_one = -50, x_Car_multi_two = 753, y_Car_multi_two = -50;
     int Live_multi_one[] = {18, 18, 18, 18, 18}, Live_multi_two[] = {18, 18, 18, 18, 18};
     ;
+    int x_car_multi_three[] = {200, 285, 385, 485, 500};
+    int x_car_multi_four[] = {650, 750, 800, 950, 900};
+    int y_car_multi_three = 800;
+    int y_car_multi_four = 800;
+    int y_car_multi_five = 900;
+    int y_car_multi_six = 900;
+    int x_car_three = 385;
+    int x_car_four = 800;
+    int x_car_five = 200;
+    int x_car_six = 900;
     boolean puase = false;
 
     //Assets/thephoto.png
     // here put thephoto.png without any path with name we understand
     String textureName[] = {
-        "Window.png",       //0
-        "howtoplay.png",    //1
-        "HIGH-SCORE.png",   //2
-        "background.png",   //3
-        "Orange Car.png",   //4
-        "Purple Car.png",   //5
-        "yellow car.png",   //6
-        "CarOne.png",      //7
-        "CarOne.png",       //8
-        "Pause_BTN.png",    //9
-        "Close_BTN.png",    //10
-        "Play_BTN.png",     //11
-        "Barrel_01.png",    //12
-        "HP_Bonus.png",     //13
-        "Oil.png",          //14
-        "background.png",   //15
-        "CarTwo.png",       //16
-        "HP_Bar.png",       //17
-        "HP_Dot.png",       //18
-        "HP_Dot_BG.png",    //19
-        "1.png",            //20
-        "2.png",            //21
-        "3.png",            //22
-        "4.png",            //23
-        "OnePlayer.png"     //24
+            "Window.png", //0
+            "howtoplay.png", //1
+            "HIGH-SCORE.png", //2
+            "background.png", //3
+            "Orange Car.png", //4
+            "Purple Car.png", //5
+            "yellow car.png", //6
+            "CarOne.png", //7
+            "CarOne.png", //8
+            "Pause_BTN.png", //9
+            "Close_BTN.png", //10
+            "Play_BTN.png", //11
+            "Barrel_01.png", //12
+            "HP_Bonus.png", //13
+            "Oil.png", //14
+            "background.png", //15
+            "CarTwo.png", //16
+            "HP_Bar.png", //17
+            "HP_Dot.png", //18
+            "HP_Dot_BG.png", //19
+            "1.png", //20
+            "2.png", //21
+            "3.png", //22
+            "4.png", //23
+            "OnePlayer.png" //24
     };
 
     int highScore = 0;
@@ -141,6 +148,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         Random rand = new Random();
         return rand.nextInt(i + 1);
     }
+
     private int rand(int min, int max) {
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
@@ -154,7 +162,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     }
 
     public void readHighScore() {
-        try (BufferedReader br = new BufferedReader(new FileReader("highscore.txt"))) {
+        try ( BufferedReader br = new BufferedReader(new FileReader("highscore.txt"))) {
             String line = br.readLine();
             if (line != null) {
                 highScore = Integer.parseInt(line);
@@ -165,12 +173,13 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
     }
 
     private void writeHighScore() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.txt"))) {
+        try ( BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.txt"))) {
             bw.write(Integer.toString(highScore));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     private void carCrash() {
         long currentTime = System.currentTimeMillis();
         long timeDifference = currentTime - lastCollisionTime;
@@ -178,51 +187,52 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             lastCollisionTime = currentTime;
             if (innx < 4) {
                 innx++;
-            }
-            else{
+            } else {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
                 System.exit(0);
             }
             life--;
-            if(life==-1){
+            if (life == -1) {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
                 System.exit(0);
 
             }
         }
-    } private void carCrash2() {
+    }
+
+    private void carCrash2() {
         long currentTime = System.currentTimeMillis();
         long timeDifference = currentTime - lastCollisionTime;
         if (timeDifference >= 1000) {
             lastCollisionTime = currentTime;
             if (innx < 5) {
                 innx++;
-            }
-            else{
+            } else {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
                 System.exit(0);
             }
             life2--;
-            if(life2==-1){
+            if (life2 == -1) {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
                 System.exit(0);
 
             }
         }
-    } private void carCrash3() {
+    }
+
+    private void carCrash3() {
         long currentTime = System.currentTimeMillis();
         long timeDifference = currentTime - lastCollisionTime;
         if (timeDifference >= 1000) {
             lastCollisionTime = currentTime;
             if (innx < 6) {
                 innx++;
-            }
-            else{
+            } else {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
                 System.exit(0);
             }
             life3--;
-            if(life3==-1){
+            if (life3 == -1) {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
                 System.exit(0);
 
@@ -399,7 +409,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         gl.glDisable(GL.GL_BLEND);
     }
 
-    private void drawElapsedTime(GL gl, long elapsedTime , int posx , int posy) {
+    private void drawElapsedTime(GL gl, long elapsedTime, int posx, int posy) {
         int xPos = 10;
         int yPos = 20;
 
@@ -500,7 +510,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         }
 //        AudioPlayer.player.start(audios);
 //        AudioPlayer.player.start(audios1);
-          playMusic();
+        playMusic();
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -601,31 +611,74 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                         lastFrameTime = currentTime;
                     }
 
-                    LeftRightorangeCarY -= carSpeed + rand(10, 15);
-                    LeftLeftpurpleCarY -= carSpeed + rand(10, 17);
-                    RightLeftpurpleCarY -= carSpeed + rand(10, 17);
-                    RightRightorangeCarY -= carSpeed + rand(10, 15);
-
-                    if (LeftRightorangeCarY < -500) {
-                        LeftRightorangeCarY = y;
+                    if (y_car_multi_three < -100) {
+                        x_car_three = x_car_multi_three[rand(4)];
+                        do {
+                            x_car_three = x_car_multi_three[rand(4)];
+                        } while (x_car_five == x_car_three);
+                        y_car_multi_three = 770;
                     }
-                    if (LeftLeftpurpleCarY < -300) {
-                        LeftLeftpurpleCarY = y;
-
-                    }
-                    if (RightLeftpurpleCarY < -1000) {
-                        RightLeftpurpleCarY = y;
-
-                    }
-                    if (RightRightorangeCarY < -200) {
-                        RightRightorangeCarY = y;
-
+                    if (y_car_multi_four < -100) {
+                        x_car_four = x_car_multi_four[rand(4)];
+                        do {
+                            x_car_four = x_car_multi_four[rand(4)];
+                        } while (x_car_six == x_car_four);
+                        y_car_multi_four = 770;
                     }
 
-                    drawCar(gl, 4, randomX2[1], LeftRightorangeCarY, 70, 110);
-                    drawCar(gl, 5, randomX2[0], LeftLeftpurpleCarY, 70, 110);
-                    drawCar(gl, 4, randomX2[2], RightLeftpurpleCarY, 70, 110);
-                    drawCar(gl, 4, randomX2[3], RightRightorangeCarY, 70, 110);
+                    if (y_car_multi_five < -100) {
+                        x_car_five = x_car_multi_three[rand(4)];
+                        do {
+                            x_car_five = x_car_multi_three[rand(4)];
+                        } while (x_car_five == x_car_three);
+                        y_car_multi_five = 880;
+
+                    }
+
+                    if (y_car_multi_six < -100) {
+                        x_car_six = x_car_multi_four[rand(4)];
+                        do {
+                            x_car_six = x_car_multi_four[rand(4)];
+                        } while (x_car_six == x_car_four);
+                        y_car_multi_six = 880;
+                    }
+
+                    if (x_car_five == x_car_three) {
+                        do {
+                            x_car_five = x_car_multi_three[rand(4)];
+                        } while (x_car_five == x_car_three);
+                    }
+
+                    if (x_car_six == x_car_four) {
+                        do {
+                            x_car_six = x_car_multi_four[rand(4)];
+                        } while (x_car_six == x_car_four);
+                    }
+
+                    y_car_multi_three -= 10;
+                    y_car_multi_four -= 10;
+                    y_car_multi_five -= 10;
+                    y_car_multi_six -= 10;
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(x_car_three, y_car_multi_three, 0);
+                    TheCarMultiOne(gl, 6);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(x_car_five, y_car_multi_five, 0);
+                    TheCarMultiOne(gl, 5);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(x_car_six, y_car_multi_six, 0);
+                    TheCarMultiOne(gl, 5);
+                    gl.glPopMatrix();
+
+                    gl.glPushMatrix();
+                    gl.glTranslated(x_car_four, y_car_multi_four, 0);
+                    TheCarMultiOne(gl, 6);
+                    gl.glPopMatrix();
 
                     gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
@@ -708,7 +761,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     gl.glTranslated(0, 220, 0);
                     squreLive(gl, Live_multi_one[4]);
                     gl.glPopMatrix();
-                    drawElapsedTime(gl, totalElapsedTime,520,600);
+                    drawElapsedTime(gl, totalElapsedTime, 520, 600);
 
                 }
                 if (puase) {
@@ -718,8 +771,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     squreSettings(gl, 11);
                     gl.glPopMatrix();
                     lastFrameTime = 0;
-                }
-                else {
+                } else {
                     isPaused = false;
                 }
 
@@ -740,8 +792,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     isPaused = true;
                     drawReturnPlay(gl);
                     lastFrameTime = 0;
-                }
-                else {
+                } else {
                     isPaused = false;
                 }
                 if (startTime == 0) {
@@ -784,31 +835,52 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 // Draw the Red car
                 drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
 
-
-
-
-                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53 ) {
-                    if( Math.abs(LeftRightorangeCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                    if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
                         carCrash();
                     }
                 }
 
-                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53 ) {
-                    if( Math.abs(LeftLeftpurpleCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
+                    if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
                         carCrash();
                     }
                 }
-                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53 ) {
-                    if( Math.abs(RightRightorangeCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
+                    if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
                         carCrash();
                     }
                 }
-                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53 ) {
-                    if( Math.abs(RightLeftpurpleCarY-redCarY ) <= 100){
+                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
+                    if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
                         carCrash();
                     }
                 }
-                drawElapsedTime(gl, elapsedTime,5,5);
+
+                drawElapsedTime(gl, elapsedTime, 5, 5);
+
+                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                    if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
+                        carCrash();
+                    }
+                }
+
+                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
+                    if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
+                        carCrash();
+                    }
+                }
+                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
+                    if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
+                        carCrash();
+                    }
+                }
+                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
+                    if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
+                        carCrash();
+                    }
+                }
+                drawElapsedTime(gl, elapsedTime, 5, 5);
                 drawScore(gl, score);
 
             }
@@ -830,8 +902,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     isPaused = true;
                     drawReturnPlay(gl);
                     lastFrameTime = 0;
-                }
-                else {
+                } else {
                     isPaused = false;
                 }
                 if (startTime == 0) {
@@ -866,24 +937,24 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 }
 
-                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53 ) {
-                    if( Math.abs(LeftRightorangeCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                    if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
                         carCrash2();
                     }
                 }
 
-                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53 ) {
-                    if( Math.abs(LeftLeftpurpleCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
+                    if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
                         carCrash2();
                     }
                 }
-                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53 ) {
-                    if( Math.abs(RightRightorangeCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
+                    if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
                         carCrash2();
                     }
                 }
-                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53 ) {
-                    if( Math.abs(RightLeftpurpleCarY-redCarY ) <= 100){
+                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
+                    if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
                         carCrash2();
                     }
                 }
@@ -895,7 +966,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 // Draw the Red car
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
-                drawElapsedTime(gl, elapsedTime,5,5);
+                drawElapsedTime(gl, elapsedTime, 5, 5);
                 drawScore(gl, score);
             }
 
@@ -916,8 +987,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     isPaused = true;
                     drawReturnPlay(gl);
                     lastFrameTime = 0;
-                }
-                else {
+                } else {
                     isPaused = false;
                 }
                 if (startTime == 0) {
@@ -958,28 +1028,28 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 // Draw the Red car
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
-                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53 ) {
-                    if( Math.abs(LeftRightorangeCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
+                    if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
                         carCrash3();
                     }
                 }
 
-                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53 ) {
-                    if( Math.abs(LeftLeftpurpleCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
+                    if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
                         carCrash3();
                     }
                 }
-                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53 ) {
-                    if( Math.abs(RightRightorangeCarY -redCarY ) <= 100){
+                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
+                    if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
                         carCrash3();
                     }
                 }
-                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53 ) {
-                    if( Math.abs(RightLeftpurpleCarY-redCarY ) <= 100){
+                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
+                    if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
                         carCrash3();
                     }
                 }
-                drawElapsedTime(gl, elapsedTime,5,5);
+                drawElapsedTime(gl, elapsedTime, 5, 5);
                 drawScore(gl, score);
             }
         } catch (Exception ex) {
@@ -1248,7 +1318,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("MultiPlayer");
                 home = false;
                 MultiPlayer = true;
-                startTime=0;
+                startTime = 0;
                 startTime = System.currentTimeMillis();
                 x = 1200;
                 y = 700;
@@ -1299,7 +1369,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("Hard lever");
                 hardlevel = true;
                 singlePlayer = false;
-                startTime=0;
+                startTime = 0;
                 startTime = System.currentTimeMillis();
             } else if ((mx > 63 && mx < 125) && (my > (615) && my < (675))) {
                 home = true;
@@ -1347,8 +1417,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 } else {
                     puase = false;
                 }
-            }
-            else if ((mx > 615 && mx < 652) && (my > (612) && my < (649))) {
+            } else if ((mx > 615 && mx < 652) && (my > (612) && my < (649))) {
                 home = true;
                 mediumLevel = false;
             }
@@ -1362,8 +1431,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 } else {
                     puase = false;
                 }
-            }
-            else if ((mx > 615 && mx < 652) && (my > (612) && my < (649))) {
+            } else if ((mx > 615 && mx < 652) && (my > (612) && my < (649))) {
                 home = true;
                 hardlevel = false;
             }
@@ -1377,6 +1445,23 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     MultiPlayer = false;
                     x = 700;
                     y = 700;
+                    totalElapsedTime = 0;
+                    lastFrameTime = 0;
+                    ///multi position
+                    x_Car_multi_one = 370;
+                    y_Car_multi_one = -50;
+                    x_Car_multi_two = 753;
+                    y_Car_multi_two = -50;
+
+                    y_car_multi_three = 800;
+                    y_car_multi_four = 800;
+                    y_car_multi_five = 900;
+                    y_car_multi_six = 900;
+                    x_car_three = 385;
+                    x_car_four = 800;
+                    x_car_five = 200;
+                    x_car_six = 900;
+                    puase = false;
                     frame.setSize(700, 700);
                     centerWindow(frame);
                     glc.repaint();
