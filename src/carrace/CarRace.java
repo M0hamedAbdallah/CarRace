@@ -64,11 +64,14 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     // Add these variables to your class
     int[] randomX = {294, 190, 407, 520};
+    int[] randomX2 = {311, 485, 685, 872};
     int[] carAccident = {7, 7, 21, 22, 23};
     int innx = 0;
     int life = 4;
     int life2 = 5;
     int life3 = 6;
+    int life4 = 6;
+    int life5 = 6;
     int cnt = 0;
     long lastCollisionTime = System.currentTimeMillis();
 
@@ -154,7 +157,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    public CarRace(String name, int width, int hight, JFrame frame) {
+    public <sTart> CarRace(String name, int width, int hight, JFrame frame) {
         this.name = name;
         x = width;
         y = hight;
@@ -233,6 +236,30 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
             }
             life3--;
             if (life3 == -1) {
+                JOptionPane.showMessageDialog(frame, "You Lose!!");
+                System.exit(0);
+
+            }
+        }
+    }
+private void carCrash4() {
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - lastCollisionTime;
+        if (timeDifference >= 1000) {
+            lastCollisionTime = currentTime;
+            if (innx < 6) {
+                innx++;
+            } else {
+                JOptionPane.showMessageDialog(frame, "You Lose!!");
+                System.exit(0);
+            }
+            life4--;
+            life5--;
+            if (life3 == -1) {
+                JOptionPane.showMessageDialog(frame, "You Lose!!");
+                System.exit(0);
+
+            }if (life4 == -1) {
                 JOptionPane.showMessageDialog(frame, "You Lose!!");
                 System.exit(0);
 
@@ -611,74 +638,54 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                         lastFrameTime = currentTime;
                     }
 
-                    if (y_car_multi_three < -100) {
-                        x_car_three = x_car_multi_three[rand(4)];
-                        do {
-                            x_car_three = x_car_multi_three[rand(4)];
-                        } while (x_car_five == x_car_three);
-                        y_car_multi_three = 770;
-                    }
-                    if (y_car_multi_four < -100) {
-                        x_car_four = x_car_multi_four[rand(4)];
-                        do {
-                            x_car_four = x_car_multi_four[rand(4)];
-                        } while (x_car_six == x_car_four);
-                        y_car_multi_four = 770;
-                    }
+                    LeftRightorangeCarY -= carSpeed + rand(10, 15);
+                    LeftLeftpurpleCarY -= carSpeed + rand(10, 17);
+                    RightLeftpurpleCarY -= carSpeed + rand(10, 17);
+                    RightRightorangeCarY -= carSpeed + rand(10, 15);
 
-                    if (y_car_multi_five < -100) {
-                        x_car_five = x_car_multi_three[rand(4)];
-                        do {
-                            x_car_five = x_car_multi_three[rand(4)];
-                        } while (x_car_five == x_car_three);
-                        y_car_multi_five = 880;
+                    if (LeftRightorangeCarY < -500) {
+                        LeftRightorangeCarY = y;
+                    }
+                    if (LeftLeftpurpleCarY < -300) {
+                        LeftLeftpurpleCarY = y;
 
                     }
+                    if (RightLeftpurpleCarY < -1000) {
+                        RightLeftpurpleCarY = y;
 
-                    if (y_car_multi_six < -100) {
-                        x_car_six = x_car_multi_four[rand(4)];
-                        do {
-                            x_car_six = x_car_multi_four[rand(4)];
-                        } while (x_car_six == x_car_four);
-                        y_car_multi_six = 880;
+                    }
+                    if (RightRightorangeCarY < -200) {
+                        RightRightorangeCarY = y;
+
+                    }
+                    drawCar(gl, 4, randomX2[0], LeftRightorangeCarY, 70, 110);
+                    drawCar(gl, 5, randomX2[1], LeftLeftpurpleCarY, 70, 110);
+                    drawCar(gl, 4, randomX2[3], RightLeftpurpleCarY, 70, 110);
+                    drawCar(gl, 5, randomX2[2], RightRightorangeCarY, 70, 110);
+
+                    if (redCarX >= randomX2[0] - 55 && redCarX <= randomX[0] + 53) {
+                        if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
+                            carCrash4();
+                        }
                     }
 
-                    if (x_car_five == x_car_three) {
-                        do {
-                            x_car_five = x_car_multi_three[rand(4)];
-                        } while (x_car_five == x_car_three);
+                    if (redCarX >= randomX2[1] - 55 && redCarX <= randomX[1] + 53) {
+                        if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
+                            carCrash4();
+                        }
+                    }
+                    if (redCarX >= randomX2[2] - 55 && redCarX <= randomX[2] + 53) {
+                        if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
+                            carCrash4();
+                        }
+                    }
+                    if (redCarX >= randomX2[3] - 55 && redCarX <= randomX[3] + 53) {
+                        if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
+                            carCrash4();
+                        }
                     }
 
-                    if (x_car_six == x_car_four) {
-                        do {
-                            x_car_six = x_car_multi_four[rand(4)];
-                        } while (x_car_six == x_car_four);
-                    }
 
-                    y_car_multi_three -= 10;
-                    y_car_multi_four -= 10;
-                    y_car_multi_five -= 10;
-                    y_car_multi_six -= 10;
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(x_car_three, y_car_multi_three, 0);
-                    TheCarMultiOne(gl, 6);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(x_car_five, y_car_multi_five, 0);
-                    TheCarMultiOne(gl, 5);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(x_car_six, y_car_multi_six, 0);
-                    TheCarMultiOne(gl, 5);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(x_car_four, y_car_multi_four, 0);
-                    TheCarMultiOne(gl, 6);
-                    gl.glPopMatrix();
 
                     gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
@@ -711,57 +718,68 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                     gl.glRotated(90, 0, 0, 1);
                     squrePar(gl, 17);
                     gl.glPopMatrix();
+                    for (int i = 1; i <= life4; i++) {
+                        drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
 
-                    gl.glPushMatrix();
-                    gl.glTranslated(1130, 0, 0);
-                    squreLive(gl, Live_multi_two[0]);
-                    gl.glPopMatrix();
-
+                    }
                     gl.glPushMatrix();
                     gl.glTranslated(1130, 60, 0);
-                    squreLive(gl, Live_multi_two[1]);
-                    gl.glPopMatrix();
+                    for (int i = 1; i <= life5; i++) {
+                        drawHPBonus(gl, 100, 100 + i * 120, 100, 100, 1);
 
-                    gl.glPushMatrix();
-                    gl.glTranslated(1130, 120, 0);
-                    squreLive(gl, Live_multi_two[2]);
+                    }
                     gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(1130, 170, 0);
-                    squreLive(gl, Live_multi_two[3]);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(1130, 220, 0);
-                    squreLive(gl, Live_multi_two[4]);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(0, 0, 0);
-                    squreLive(gl, Live_multi_one[0]);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(0, 60, 0);
-                    squreLive(gl, Live_multi_one[1]);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(0, 120, 0);
-                    squreLive(gl, Live_multi_one[2]);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(0, 170, 0);
-                    squreLive(gl, Live_multi_one[3]);
-                    gl.glPopMatrix();
-
-                    gl.glPushMatrix();
-                    gl.glTranslated(0, 220, 0);
-                    squreLive(gl, Live_multi_one[4]);
-                    gl.glPopMatrix();
-                    drawElapsedTime(gl, totalElapsedTime, 520, 600);
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(1130, 0, 0);
+//                    squreLive(gl, Live_multi_two[0]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(1130, 60, 0);
+//                    squreLive(gl, Live_multi_two[1]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(1130, 120, 0);
+//                    squreLive(gl, Live_multi_two[2]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(1130, 170, 0);
+//                    squreLive(gl, Live_multi_two[3]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(1130, 220, 0);
+//                    squreLive(gl, Live_multi_two[4]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(0, 0, 0);
+//                    squreLive(gl, Live_multi_one[0]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(0, 60, 0);
+//                    squreLive(gl, Live_multi_one[1]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(0, 120, 0);
+//                    squreLive(gl, Live_multi_one[2]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(0, 170, 0);
+//                    squreLive(gl, Live_multi_one[3]);
+//                    gl.glPopMatrix();
+//
+//                    gl.glPushMatrix();
+//                    gl.glTranslated(0, 220, 0);
+//                    squreLive(gl, Live_multi_one[4]);
+//                    gl.glPopMatrix();
+//                    drawElapsedTime(gl, totalElapsedTime, 520, 600);
 
                 }
                 if (puase) {
@@ -835,29 +853,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 // Draw the Red car
                 drawCar(gl, carAccident[innx], redCarX, redCarY, 70, 110);
 
-                if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
-                    if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {
-                        carCrash();
-                    }
-                }
 
-                if (redCarX >= randomX[1] - 55 && redCarX <= randomX[1] + 53) {
-                    if (Math.abs(LeftLeftpurpleCarY - redCarY) <= 100) {
-                        carCrash();
-                    }
-                }
-                if (redCarX >= randomX[2] - 55 && redCarX <= randomX[2] + 53) {
-                    if (Math.abs(RightRightorangeCarY - redCarY) <= 100) {
-                        carCrash();
-                    }
-                }
-                if (redCarX >= randomX[3] - 55 && redCarX <= randomX[3] + 53) {
-                    if (Math.abs(RightLeftpurpleCarY - redCarY) <= 100) {
-                        carCrash();
-                    }
-                }
-
-                drawElapsedTime(gl, elapsedTime, 5, 5);
 
                 if (redCarX >= randomX[0] - 55 && redCarX <= randomX[0] + 53) {
                     if (Math.abs(LeftRightorangeCarY - redCarY) <= 100) {

@@ -92,7 +92,7 @@ public class frame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         JFrame obNull = null;
         if (!name.getText().equals("")) {
-            new STart(new CarRace(name.getText(), 700, 700, obNull), name.getText());
+            new STart(new CarRace(name.getText(), 700, 700, this), name.getText());
             this.setVisible(false);
         }else{
             JOptionPane.showMessageDialog(this, "The Name is Empty");
