@@ -65,7 +65,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
     // Add these variables to your class
     int[] randomX = {294, 190, 407, 520};   
-    int[] carAccident = {7 ,7, 21 ,22, 23};   
+    int[] randomX2 = {313, 493, 683, 873};
+    int[] carAccident = {7 ,7, 21 ,22, 23};
     int innx=0;
     int life = 4;
     int life2 = 5;
@@ -599,7 +600,33 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                         }
                         lastFrameTime = currentTime;
                     }
-                    
+
+                    LeftRightorangeCarY -= carSpeed + rand(10, 15);
+                    LeftLeftpurpleCarY -= carSpeed + rand(10, 17);
+                    RightLeftpurpleCarY -= carSpeed + rand(10, 17);
+                    RightRightorangeCarY -= carSpeed + rand(10, 15);
+
+                    if (LeftRightorangeCarY < -500) {
+                        LeftRightorangeCarY = y;
+                    }
+                    if (LeftLeftpurpleCarY < -300) {
+                        LeftLeftpurpleCarY = y;
+
+                    }
+                    if (RightLeftpurpleCarY < -1000) {
+                        RightLeftpurpleCarY = y;
+
+                    }
+                    if (RightRightorangeCarY < -200) {
+                        RightRightorangeCarY = y;
+
+                    }
+
+                    drawCar(gl, 4, randomX2[1], LeftRightorangeCarY, 70, 110);
+                    drawCar(gl, 5, randomX2[0], LeftLeftpurpleCarY, 70, 110);
+                    drawCar(gl, 4, randomX2[2], RightLeftpurpleCarY, 70, 110);
+                    drawCar(gl, 4, randomX2[3], RightRightorangeCarY, 70, 110);
+
                     gl.glPushMatrix();
                     gl.glTranslated(x_Car_multi_one, y_Car_multi_one, 0);
                     TheCarMultiOne(gl, 8);
