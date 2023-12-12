@@ -112,6 +112,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
         "2.png", //21
         "3.png", //22
         "4.png", //23
+        "OnePlayer.png"//24
     };
 
     int highScore = 0;
@@ -498,7 +499,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 squreOfHome(gl, 1);
             }
             if (singlePlayer) {
-                squreOfHome(gl, 21);
+                squreOfHome(gl, 24);
             }
             if (HIGHSCORE) {
                 squreOfHome(gl, 2);
@@ -717,7 +718,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 // Draw the Red car
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
-                drawElapsedTime(gl, elapsedTime);
+//                drawElapsedTime(gl, elapsedTime);
                 drawScore(gl, score);
             }
 
@@ -765,7 +766,7 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
 
                 // Draw the Red car
                 drawCar(gl, 7, redCarX, redCarY, 70, 110);
-                drawElapsedTime(gl, elapsedTime);
+//                drawElapsedTime(gl, elapsedTime);
                 drawScore(gl, score);
             }
         } catch (Exception ex) {
@@ -1049,9 +1050,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 home = false;
 //                hardlevel = true;
                 singlePlayer = true;
-                hardlevel = true;
-                startTime=0;
-                startTime = System.currentTimeMillis();
+//                hardlevel = true;
+
             } else if ((mx > 534 && mx < 589) && (my > (621) && my < (669))) {
                 System.out.println("sound");
                 if (musicOn) {
@@ -1086,6 +1086,8 @@ public class CarRace extends AnimListener implements GLEventListener, MouseListe
                 System.out.println("Hard lever");
                 hardlevel = true;
                 singlePlayer = false;
+                startTime=0;
+                startTime = System.currentTimeMillis();
             } else if ((mx > 63 && mx < 125) && (my > (615) && my < (675))) {
                 home = true;
                 singlePlayer = false;
